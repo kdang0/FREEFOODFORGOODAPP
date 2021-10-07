@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "290720989637",
+    "project_id": "freefood-9dcea",
+    "storage_bucket": "freefood-9dcea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290720989637:android:7106db01cfaf4dea03cbac",
+        "android_client_info": {
+          "package_name": "com.example.freefoodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290720989637-ss0oo40mm0vdl765ll9cmlisffgd8sds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnNHA3rBGnoAS3ib_cWaoOqbFSjRRgvP8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290720989637-ss0oo40mm0vdl765ll9cmlisffgd8sds.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

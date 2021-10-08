@@ -2,21 +2,29 @@ package com.example.freefoodapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
 
 const val TAG = "MainActivity"
+
+//global variables
+private var firstName: String? = null
+private var lastName: String? = null
+private var email: String? = null
+private var password: String? = null
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var DB: DatabaseReference
     lateinit var DBPosts: DatabaseReference
     lateinit var DBComments: DatabaseReference
+    lateinit var DBUsers: DatabaseReference
+    lateinit var DBAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +33,18 @@ class MainActivity : AppCompatActivity() {
         DB = FirebaseDatabase.getInstance().reference
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         DBComments = DB.child(DatabaseVars.FIREBASE_COMMENTS)
+        DBAuth = FirebaseAuth.getInstance()
+        DBUsers = DB.child("Users")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)
+
+        createNewAccount()
     }
 
     val postListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+            Log.d(TAG, "onChildAdded posts:" + dataSnapshot.key!!)
             addPostToAList(dataSnapshot)
         }
 
@@ -55,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     val commentListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            Log.d(TAG, "onChildAdded:" + dataSnapshot.key!!)
+            Log.d(TAG, "onChildAdded comments:" + dataSnapshot.key!!)
             addCommentToAList(dataSnapshot)
         }
 
@@ -74,6 +86,35 @@ class MainActivity : AppCompatActivity() {
         override fun onCancelled(error: DatabaseError) {
             Log.w(TAG, "commentListener error: ", error.toException())
         }
+    }
+
+    private fun createNewAccount() {
+        Log.d(TAG, "Creating new account...")
+        firstName = "TestFirst"
+        lastName = "TestLast"
+        email = "TestEmail@kylem.org"
+        password = "123456"
+
+        if(!firstName!!.isEmpty() && !lastName!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
+            DBAuth!!
+                .createUserWithEmailAndPassword(email!!, password!!)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Creating user worked!")
+                        val userId = DBAuth!!.currentUser!!.uid
+                        val currentUserDb = DBUsers!!.child(userId)
+                        currentUserDb.child("firstName").setValue(firstName)
+                        currentUserDb.child("lastName").setValue(lastName)
+                    } else {
+                        Log.w(TAG, "Creating user failed: ", task.exception)
+                    }
+                }
+        }
+        else
+        {
+            Log.d(TAG, "A field was empty when trying to create an account")
+        }
+        Log.d(TAG, "Creating done for new account...")
     }
 
     private fun addPostToAList(dataSnapshot: DataSnapshot) {
@@ -138,5 +179,7 @@ class MainActivity : AppCompatActivity() {
         comment.id = newComment.key
         newComment.setValue(comment)
         Log.d(TAG, "Comment uploaded to cloud")
+
+        var d: Date = Date()
     }
 }

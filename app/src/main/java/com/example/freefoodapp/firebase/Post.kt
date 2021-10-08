@@ -11,7 +11,7 @@ class Post {
     var date: Date? = null
     var description: String? = null
     var image: String? = null
-    var likes: Int? = null
+    var likes: Long? = null
     var location: String? = null
     var name: String? = null
     var user: String? = null

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FREEFOODAPP</string>
+    <string name = "eventName">Event Name</string>
+    <string name = "eventDate">Event Date</string>
 </resources>

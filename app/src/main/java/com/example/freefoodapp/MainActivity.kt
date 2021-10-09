@@ -2,6 +2,7 @@ package com.example.freefoodapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.DatabaseVars
@@ -12,11 +13,15 @@ import java.util.*
 
 const val TAG = "MainActivity"
 
-//global variables
+//register vars
 private var firstName: String? = null
 private var lastName: String? = null
 private var email: String? = null
 private var password: String? = null
+
+//login vars
+private var loginEmail: String? = null
+private var loginPassword: String? = null
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,10 +41,10 @@ class MainActivity : AppCompatActivity() {
         DBAuth = FirebaseAuth.getInstance()
         DBUsers = DB.child("Users")
 
+        login("TestEmail@kylem.org", "123456")
+
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)
-
-        createNewAccount()
     }
 
     val postListener = object : ChildEventListener {
@@ -88,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNewAccount() {
+    private fun createAccount() {
         Log.d(TAG, "Creating new account...")
         firstName = "TestFirst"
         lastName = "TestLast"
@@ -115,6 +120,28 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "A field was empty when trying to create an account")
         }
         Log.d(TAG, "Creating done for new account...")
+    }
+
+    private fun login(givenEmail: String, givenPassword: String) {
+        loginEmail = givenEmail
+        loginPassword = givenPassword
+        if (!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPassword)) {
+            Log.d(TAG, "Trying to login.")
+            DBAuth.signInWithEmailAndPassword(loginEmail!!, loginPassword!!).addOnCompleteListener(this) { task ->
+                if(task.isSuccessful) {
+                    Log.d(TAG, "LOGIN SUCCESS!")
+                    //Do something here
+                }
+                else {
+                    Log.d(TAG, "LOGIN FAILED: ${task.exception}")
+                    //Tell user here
+                }
+            }
+        }
+        else {
+            Log.d(TAG, "Login or password is empty")
+            //Tell user here
+        }
     }
 
     private fun addPostToAList(dataSnapshot: DataSnapshot) {

@@ -181,5 +181,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Comment uploaded to cloud")
 
         var d: Date = Date()
+
     }
 }

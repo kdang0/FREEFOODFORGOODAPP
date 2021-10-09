@@ -2,4 +2,10 @@
     <string name="app_name">FREEFOODAPP</string>
     <string name = "eventName">Event Name</string>
     <string name = "eventDate">Event Date</string>
+    <string name = "eventDesc">Event Description</string>
+    <string name = "eventTime">Event Time</string>
+    <string name = "eventLocation">Event Location</string>
+    <string name = "displayName">Display Name</string>
+    <string name = "commentDT">Date and Time</string>
+    <string name = "commentdescr">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 </resources>

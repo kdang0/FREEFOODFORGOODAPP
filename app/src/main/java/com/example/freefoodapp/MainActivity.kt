@@ -303,8 +303,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 
-    override fun onLogin(accountName: String) {
-        val fragment = FoodListFragment.newInstance()
+    override fun onLogin(accountName: String, userName: String) {
+        val fragment = FoodListFragment.newInstance(accountName, userName)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 

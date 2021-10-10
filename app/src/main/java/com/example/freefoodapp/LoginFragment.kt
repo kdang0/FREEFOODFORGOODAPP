@@ -3,6 +3,7 @@ package com.example.freefoodapp
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import java.util.*
 
 private const val TAG = "LoginFragment"
@@ -25,17 +28,24 @@ class LoginFragment : Fragment() {
     private lateinit var editTextTextPassword: EditText
     private lateinit var loginButton: Button
     private lateinit var registerButton: Button
+    lateinit var DB: DatabaseReference //Registering
+    lateinit var DBUsers: DatabaseReference //Registering
+    lateinit var DBAuth: FirebaseAuth //Registering
     private var accountName: String = ""
     private var password: String = ""
+    private var username: String = ""
 
     interface MainCallbacks {
-        fun onLogin(accountName: String)
+        fun onLogin(accountName: String, userName: String)
         fun onClickRegister()
     }
     private var mainCallbacks: MainCallbacks? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DB = FirebaseDatabase.getInstance().reference //registering
+        DBAuth = FirebaseAuth.getInstance() //registering
+        DBUsers = DB.child("Users") //registering
     }
 
     override fun onAttach(context: Context) {
@@ -60,10 +70,13 @@ class LoginFragment : Fragment() {
             mainCallbacks?.onClickRegister()
         }
         loginButton.setOnClickListener {
-            //check to see if login data is correct
-            Log.d(TAG, "Account Name is: $accountName")
+            var validLogin = login(accountName, password)
+            Log.d(TAG, "Account Email is: $accountName")
+            Log.d(TAG, "Account Username is: $username")
             Log.d(TAG, "Password is: $password")
-            mainCallbacks?.onLogin(accountName)
+            if(validLogin) {
+                mainCallbacks?.onLogin(accountName, username)
+            }
         }
         return view
     }
@@ -116,6 +129,51 @@ class LoginFragment : Fragment() {
             }
         }
         editTextTextPassword.addTextChangedListener(passwordTextWatcher)
+    }
+
+    private fun login(givenEmail: String, givenPassword: String): Boolean {
+        var loginEmail = givenEmail
+        var loginPassword = givenPassword
+        var validLogin: Boolean = false
+        if (!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPassword)) {
+            Log.d(TAG, "Trying to login.")
+            DBAuth.signInWithEmailAndPassword(loginEmail!!, loginPassword!!).addOnCompleteListener(this.requireActivity()) { task ->
+                if(task.isSuccessful) {
+                    Log.d(TAG, "LOGIN SUCCESS!")
+                    //Do something here
+                    Log.d(TAG, "Logged in User ID: ${task.result?.user?.uid}")
+                    var temp = DBUsers.child("${task.result?.user?.uid}")
+                    temp.addValueEventListener(userEventListener)
+                    validLogin = true
+                }
+                else {
+                    Log.d(TAG, "LOGIN FAILED: ${task.exception}")
+                    validLogin = false
+                    //Tell user here
+                }
+            }
+        }
+        else {
+            Log.d(TAG, "Login or password is empty")
+            validLogin = false
+            //Tell user here
+        }
+        return validLogin
+    }
+
+    var userEventListener: ValueEventListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            for (snap in dataSnapshot.children) {
+                Log.d(TAG, "UserEventListener: $snap")
+                if(snap.key.equals("username")) {
+                    globalUserName = "${snap.getValue()}"
+                    username = "${snap.getValue()}"
+                    Log.d(TAG, "Username: $globalUserName")
+                }
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {}
     }
 
     companion object {

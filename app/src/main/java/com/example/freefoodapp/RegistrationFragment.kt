@@ -176,13 +176,12 @@ class RegistrationFragment: Fragment() {
 
     private fun createNewAccount(): Boolean {
         Log.d(TAG, "Creating new account...")
-        var firstName = this.username
-        var lastName = "TestLast"
+        var username = this.username
         var email = this.emailAddress
         var password = this.password
         var isCreated: Boolean = true
 
-        if(!firstName!!.isEmpty() && !lastName!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
+        if(!username!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
             DBAuth!!
                 .createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener(this.requireActivity()) { task ->
@@ -190,8 +189,7 @@ class RegistrationFragment: Fragment() {
                         Log.d(TAG, "Creating user worked!")
                         val userId = DBAuth!!.currentUser!!.uid
                         val currentUserDb = DBUsers!!.child(userId)
-                        currentUserDb.child("firstName").setValue(firstName)
-                        currentUserDb.child("lastName").setValue(lastName)
+                        currentUserDb.child("username").setValue(username)
                     } else {
                         Log.w(TAG, "Creating user failed: ", task.exception)
                         isCreated = false

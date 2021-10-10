@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
 
-const val TAG = "MainActivity"
+private const val TAG = "MainActivity"
 
 //global variables
 private var firstName: String? = null
@@ -18,28 +18,34 @@ private var lastName: String? = null
 private var email: String? = null
 private var password: String? = null
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks {
 
-    lateinit var DB: DatabaseReference
+    lateinit var DB: DatabaseReference //Registering
     lateinit var DBPosts: DatabaseReference
     lateinit var DBComments: DatabaseReference
-    lateinit var DBUsers: DatabaseReference
-    lateinit var DBAuth: FirebaseAuth
+    lateinit var DBUsers: DatabaseReference //Registering
+    lateinit var DBAuth: FirebaseAuth //Registering
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
-        DB = FirebaseDatabase.getInstance().reference
+        DB = FirebaseDatabase.getInstance().reference //registering
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         DBComments = DB.child(DatabaseVars.FIREBASE_COMMENTS)
-        DBAuth = FirebaseAuth.getInstance()
-        DBUsers = DB.child("Users")
+        DBAuth = FirebaseAuth.getInstance() //registering
+        DBUsers = DB.child("Users") //registering
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)
 
-        createNewAccount()
+        //createNewAccount()
+        if (currentFragment == null) {
+            val fragment = LoginFragment.newInstance()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+                .commit()
+        }
     }
 
     val postListener = object : ChildEventListener {
@@ -182,5 +188,25 @@ class MainActivity : AppCompatActivity() {
 
         var d: Date = Date()
 
+    }
+
+    override fun onClickRegister() {
+        val fragment = RegistrationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onLogin(accountName: String) {
+        val fragment = FoodListFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onRegister() {
+        val fragment = ConfirmationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onReturnToLogin() {
+        val fragment = LoginFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 }

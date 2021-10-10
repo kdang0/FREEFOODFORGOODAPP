@@ -15,7 +15,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/likesImageView"
             android:layout_width="46dp"
             android:layout_height="39dp"
             android:layout_marginStart="36dp"
@@ -33,7 +33,7 @@
             android:layout_marginTop="17dp"
             android:text="@string/numOfLikes"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/likesImageView"
             app:layout_constraintHorizontal_bias="0.571"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventDate"

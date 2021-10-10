@@ -8,6 +8,8 @@ import android.util.Log
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.util.*
@@ -18,6 +20,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 
 const val TAG = "MainActivity"
 
@@ -32,10 +35,9 @@ private var loginPassword: String? = null
 var globalUserName: String? = null
 
 //Image Upload vars
-private val IMAGE_REQUEST_CODE = 71
 private var firebaseStore: FirebaseStorage? = null
 private var storageRef: StorageReference? = null
-private var pathToUploadFile: Uri? = null
+private var uploadableFilePath: String? = null
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         DBComments = DB.child(DatabaseVars.FIREBASE_COMMENTS)
         DBAuth = FirebaseAuth.getInstance()
         DBUsers = DB.child("Users")
+        firebaseStore = FirebaseStorage.getInstance()
+        storageRef = FirebaseStorage.getInstance().reference
 
         login("TestEmail2@kylem.org", "123456")
 
@@ -223,6 +227,7 @@ class MainActivity : AppCompatActivity() {
         //Do something here to update post view
     }
 
+    //The filepath will be loated in uploadableFilePath
     fun createPost(description: String, name: String, image: String, location: String, user: String) {
         val post = Post.createPost()
         post.date = Date()
@@ -238,6 +243,35 @@ class MainActivity : AppCompatActivity() {
         newPost.setValue(post)
         Log.d(TAG, "Post uploaded to cloud")
     }
+
+    private fun uploadImageToFirebase(pathToUploadFile: Uri){
+        if(pathToUploadFile != null){
+            val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
+            val uploadImgTask = reference?.putFile(pathToUploadFile!!)
+            val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation reference.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val uri = task.result
+                    //Do something with the uri
+                    uploadableFilePath = uri.toString()
+                    //TODO: Trigger something here to actually post. Possible call the createPost() here?
+                } else {
+                    Log.d(TAG, "An error occured uploading a file")
+                }
+            }?.addOnFailureListener{
+                //Put something here for another failure?
+            }
+        }else{
+            Log.d(TAG, "You need to upload an image")
+        }
+    }
+
 
     fun createComment(content: String, user: String, postID: String) {
         val comment = Comment.createComment()

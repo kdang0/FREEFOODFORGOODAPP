@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.comment_list)
 
         DB = FirebaseDatabase.getInstance().reference
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)

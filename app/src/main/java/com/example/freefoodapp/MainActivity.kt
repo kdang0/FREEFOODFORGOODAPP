@@ -22,7 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 
-const val TAG = "MainActivity"
+private const val TAG = "MainActivity"
 
 //register vars
 private var username: String? = null
@@ -39,30 +39,38 @@ private var firebaseStore: FirebaseStorage? = null
 private var storageRef: StorageReference? = null
 private var uploadableFilePath: String? = null
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks {
 
-    lateinit var DB: DatabaseReference
+    lateinit var DB: DatabaseReference //Registering
     lateinit var DBPosts: DatabaseReference
     lateinit var DBComments: DatabaseReference
-    lateinit var DBUsers: DatabaseReference
-    lateinit var DBAuth: FirebaseAuth
+    lateinit var DBUsers: DatabaseReference //Registering
+    lateinit var DBAuth: FirebaseAuth //Registering
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.comment_list)
+        setContentView(R.layout.activity_main)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
-        DB = FirebaseDatabase.getInstance().reference
+        DB = FirebaseDatabase.getInstance().reference //registering
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         DBComments = DB.child(DatabaseVars.FIREBASE_COMMENTS)
-        DBAuth = FirebaseAuth.getInstance()
-        DBUsers = DB.child("Users")
         firebaseStore = FirebaseStorage.getInstance()
         storageRef = FirebaseStorage.getInstance().reference
 
         login("TestEmail2@kylem.org", "123456")
+        DBAuth = FirebaseAuth.getInstance() //registering
+        DBUsers = DB.child("Users") //registering
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)
+
+        //createNewAccount()
+        if (currentFragment == null) {
+            val fragment = LoginFragment.newInstance()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+                .commit()
+        }
     }
 
     val postListener = object : ChildEventListener {
@@ -284,5 +292,28 @@ class MainActivity : AppCompatActivity() {
         comment.id = newComment.key
         newComment.setValue(comment)
         Log.d(TAG, "Comment uploaded to cloud")
+
+        var d: Date = Date()
+
+    }
+
+    override fun onClickRegister() {
+        val fragment = RegistrationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onLogin(accountName: String) {
+        val fragment = FoodListFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onRegister() {
+        val fragment = ConfirmationFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onReturnToLogin() {
+        val fragment = LoginFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 }

@@ -58,9 +58,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         firebaseStore = FirebaseStorage.getInstance()
         storageRef = FirebaseStorage.getInstance().reference
 
-        login("TestEmail2@kylem.org", "123456")
         DBAuth = FirebaseAuth.getInstance() //registering
         DBUsers = DB.child("Users") //registering
+
+        login("TestEmail2@kylem.org", "123456")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)

@@ -1,5 +1,6 @@
 package com.example.freefoodapp
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -15,23 +16,26 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 
 import com.google.firebase.database.ValueEventListener
-
-
-
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 const val TAG = "MainActivity"
 
 //register vars
-private var firstName: String? = null
-private var lastName: String? = null
+private var username: String? = null
 private var email: String? = null
 private var password: String? = null
 
 //login vars
 private var loginEmail: String? = null
 private var loginPassword: String? = null
-var globalFirstName: String? = null
-var globalLastName: String? = null
+var globalUserName: String? = null
+
+//Image Upload vars
+private val IMAGE_REQUEST_CODE = 71
+private var firebaseStore: FirebaseStorage? = null
+private var storageRef: StorageReference? = null
+private var pathToUploadFile: Uri? = null
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         DBAuth = FirebaseAuth.getInstance()
         DBUsers = DB.child("Users")
 
-        login("TestEmail@kylem.org", "123456")
+        login("TestEmail2@kylem.org", "123456")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBPosts.orderByKey().addChildEventListener(commentListener)
@@ -105,12 +109,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun createAccount() {
         Log.d(TAG, "Creating new account...")
-        firstName = "TestFirst"
-        lastName = "TestLast"
-        email = "TestEmail@kylem.org"
+        username = "TestFirst"
+        email = "TestEmail2@kylem.org"
         password = "123456"
 
-        if(!firstName!!.isEmpty() && !lastName!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
+        if(!username!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
             DBAuth!!
                 .createUserWithEmailAndPassword(email!!, password!!)
                 .addOnCompleteListener(this) { task ->
@@ -118,10 +121,8 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, "Creating user worked!")
                         val userId = DBAuth!!.currentUser!!.uid
                         val currentUserDb = DBUsers!!.child(userId)
-                        currentUserDb.child("firstName").setValue(firstName)
-                        currentUserDb.child("lastName").setValue(lastName)
-                        globalFirstName = firstName
-                        globalLastName = lastName
+                        currentUserDb.child("username").setValue(username)
+                        globalUserName = username
                     } else {
                         Log.w(TAG, "Creating user failed: ", task.exception)
                     }
@@ -166,13 +167,9 @@ class MainActivity : AppCompatActivity() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             for (snap in dataSnapshot.children) {
                 Log.d(TAG, "UserEventListener: $snap")
-                if(snap.key.equals("firstName")) {
-                    globalFirstName = "${snap.getValue()}"
-                    Log.d(TAG, "Firstname: $globalFirstName")
-                }
-                if(snap.key.equals("lastName")) {
-                    globalLastName = "${snap.getValue()}"
-                    Log.d(TAG, "Lastname: $globalLastName")
+                if(snap.key.equals("username")) {
+                    globalUserName = "${snap.getValue()}"
+                    Log.d(TAG, "Username: $globalUserName")
                 }
             }
         }

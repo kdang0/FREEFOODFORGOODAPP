@@ -22,6 +22,7 @@ import java.util.*
 
 private const val TAG = "FoodEventCreateFragment"
 private const val ARG_EMAIL = "User_Email"
+private const val ARG_USERNAME = "User_Username"
 
 class FoodEventCreateFragment: Fragment() {
     private lateinit var nameTextView: TextView
@@ -44,9 +45,11 @@ class FoodEventCreateFragment: Fragment() {
     private var time: String = ""
     private var loc: String = ""
     private var descrip: String = ""
+    private var email: String = ""
+    private var username: String = ""
 
     interface MainCallbacks {
-        fun onPost()
+        fun onPost(email: String, userName: String)
     }
     private var mainCallbacks: MainCallbacks? = null
 
@@ -54,6 +57,8 @@ class FoodEventCreateFragment: Fragment() {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
+        username = arguments?.getSerializable(ARG_USERNAME) as String
+        email = arguments?.getSerializable(ARG_EMAIL) as String
     }
 
     override fun onAttach(context: Context) {
@@ -81,10 +86,9 @@ class FoodEventCreateFragment: Fragment() {
         postEvent = view.findViewById(R.id.postEvent) as Button
         uploadImage = view.findViewById(R.id.uploadPost) as Button
         postEvent.setOnClickListener {
-            var something: String = ""
-            var somethingUser: String = ""
-            createPost(descrip, name, something, loc, somethingUser)
-            mainCallbacks?.onPost()
+            var imageAsString: String = ""
+            createPost(descrip, name, imageAsString, loc, username)
+            mainCallbacks?.onPost(email, username)
         }
         uploadImage.setOnClickListener {
             //image stuff
@@ -216,9 +220,10 @@ class FoodEventCreateFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(accountName: String): FoodListFragment {
+        fun newInstance(accountName: String, userName: String): FoodListFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_EMAIL, accountName)
+                putSerializable(ARG_USERNAME, userName)
             }
             return FoodListFragment().apply {
                 arguments = args

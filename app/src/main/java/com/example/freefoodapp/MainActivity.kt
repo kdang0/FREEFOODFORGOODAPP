@@ -40,7 +40,8 @@ private var firebaseStore: FirebaseStorage? = null
 private var storageRef: StorageReference? = null
 private var uploadableFilePath: String? = null
 
-class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks {
+class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks,
+    FoodListFragment.MainCallbacks, FoodEventCreateFragment.MainCallbacks {
 
     lateinit var DB: DatabaseReference //Registering
     lateinit var DBPosts: DatabaseReference
@@ -373,6 +374,16 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
 
     override fun onReturnToLogin() {
         val fragment = LoginFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onEventSelected(email: String, userName: String, post: Post) {
+        val fragment = FoodEventFragment.newInstance(email, userName, post)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onPost(accountName: String, userName: String) {
+        val fragment = FoodListFragment.newInstance(accountName, userName)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 }

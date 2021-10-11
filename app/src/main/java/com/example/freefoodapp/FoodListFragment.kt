@@ -125,7 +125,11 @@ class FoodListFragment: Fragment() {
         //Do something here to update post view
     }
 
-    private inner class FoodEventHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    fun deletePostByID(postID: String) {
+        DBPosts.child(postID).removeValue()
+    }
+
+    private inner class FoodEventHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         private lateinit var post: Post
         private val likesImageView : ImageView = itemView.findViewById(R.id.likesImageView)
         private val eventImage : ImageView = itemView.findViewById(R.id.eventImage)
@@ -135,6 +139,7 @@ class FoodListFragment: Fragment() {
 
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
 
         fun bind(post: Post) {
@@ -146,6 +151,13 @@ class FoodListFragment: Fragment() {
 
         override fun onClick(p0: View?) {
             callbacks?.onEventSelected(email, username, post)
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            post.id?.let { deletePostByID(it) }
+            posts.remove(post)
+            updateUI(posts)
+            return true
         }
     }
 

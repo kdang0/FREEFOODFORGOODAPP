@@ -67,6 +67,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         login("TestEmail2@kylem.org", "123456")
         //addLikeToPost("-MlSLcizbRZ5AMOgi8yA")
         //removeLikeToPost("-MlSLcizbRZ5AMOgi8yA")
+        //createPost("This is a test post", "Kyle Mikolajczyk", "test", "DAKA", "iGJahlqUBTPI0ipaydHnmmNERnC3")
+        //deletePostByID("-MlSLcizbRZ5AMOgi8yA")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBComments.orderByKey().addChildEventListener(commentListener)
@@ -355,6 +357,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
 
         var d: Date = Date()
 
+    }
+
+    fun deletePostByID(postID: String) {
+        DBPosts.child(postID).removeValue()
     }
 
     override fun onClickRegister() {

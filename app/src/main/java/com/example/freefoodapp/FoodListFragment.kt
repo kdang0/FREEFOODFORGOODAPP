@@ -19,19 +19,21 @@ private const val ARG_EMAIL = "User_Email"
 private const val ARG_USERNAME = "User_Username"
 
 class FoodListFragment: Fragment() {
-    interface Callbacks {
-        fun onEventSelected()
+    interface MainCallbacks {
+        fun onEventSelected(email: String, userName: String, post: Post)
     }
-    private var callbacks: Callbacks? = null
+    private var callbacks: MainCallbacks? = null
     private lateinit var foodRecyclerView: RecyclerView
     lateinit var DB: DatabaseReference //Registering
     lateinit var DBPosts: DatabaseReference
     private var adapter: FoodEventAdapter? = FoodEventAdapter(emptyList())
     private var posts: MutableList<Post> = emptyList<Post>().toMutableList()
+    private lateinit var username: String
+    private lateinit var email: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as Callbacks?
+        callbacks = context as MainCallbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,8 @@ class FoodListFragment: Fragment() {
         DB = FirebaseDatabase.getInstance().reference //registering
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         DBPosts.orderByKey().addChildEventListener(postListener)
+        username = arguments?.getSerializable(ARG_USERNAME) as String
+        email = arguments?.getSerializable(ARG_EMAIL) as String
     }
 
     override fun onCreateView(
@@ -140,7 +144,7 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onClick(p0: View?) {
-            callbacks?.onEventSelected()
+            callbacks?.onEventSelected(email, username, post)
         }
     }
 
@@ -152,8 +156,8 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onBindViewHolder(holder: FoodEventHolder, position: Int) {
-            val bbgame = posts[position]
-            holder.bind(bbgame)
+            val post = posts[position]
+            holder.bind(post)
         }
 
         override fun getItemCount(): Int {

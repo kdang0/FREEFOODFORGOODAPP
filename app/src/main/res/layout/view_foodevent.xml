@@ -49,7 +49,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
         android:text="Description:"
-        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintBottom_toTopOf="@+id/eventDateTime"
         app:layout_constraintEnd_toStartOf="@+id/description" />
 
     <ImageView
@@ -90,7 +90,7 @@
         app:layout_constraintVertical_bias="0.027" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/eventLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
@@ -111,17 +111,17 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/eventDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="52dp"
         android:text="Date and Time:"
-        app:layout_constraintBottom_toTopOf="@+id/textView11"
-        app:layout_constraintEnd_toStartOf="@+id/editTextDate" />
+        app:layout_constraintBottom_toTopOf="@+id/eventLocation"
+        app:layout_constraintEnd_toStartOf="@+id/dateTextView" />
 
     <TextView
-        android:id="@id/editTextDate"
+        android:id="@id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
-        android:id="@id/editTextTime"
+        android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="112dp"
@@ -139,6 +139,6 @@
         android:text="@string/eventTime"
         app:layout_constraintBottom_toTopOf="@+id/location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDate"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView"
         app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

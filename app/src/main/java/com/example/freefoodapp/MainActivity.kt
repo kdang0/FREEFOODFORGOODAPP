@@ -64,10 +64,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         DBAuth = FirebaseAuth.getInstance() //registering
         DBUsers = DB.child("Users") //registering
 
-        login("TestEmail2@kylem.org", "123456")
+        //login("TestEmail2@kylem.org", "123456")
         //addLikeToPost("-MlSLcizbRZ5AMOgi8yA")
         //removeLikeToPost("-MlSLcizbRZ5AMOgi8yA")
-        //createPost("This is a test post", "Kyle Mikolajczyk", "test", "DAKA", "iGJahlqUBTPI0ipaydHnmmNERnC3")
+        //createPost("This is a test post", "Cheese at fountain", "test", "DAKA", "iGJahlqUBTPI0ipaydHnmmNERnC3")
         //deletePostByID("-MlSLcizbRZ5AMOgi8yA")
 
         DBPosts.orderByKey().addChildEventListener(postListener)

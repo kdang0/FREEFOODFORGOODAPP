@@ -75,7 +75,7 @@ class LoginFragment : Fragment() {
             Log.d(TAG, "Account Username is: $username")
             Log.d(TAG, "Password is: $password")
             if(validLogin) {
-                mainCallbacks?.onLogin(accountName, username)
+                //mainCallbacks?.onLogin(accountName, username)
             }
         }
         return view
@@ -145,6 +145,7 @@ class LoginFragment : Fragment() {
                     var temp = DBUsers.child("${task.result?.user?.uid}")
                     temp.addValueEventListener(userEventListener)
                     validLogin = true
+                    mainCallbacks?.onLogin(accountName, username)
                 }
                 else {
                     Log.d(TAG, "LOGIN FAILED: ${task.exception}")
@@ -158,6 +159,7 @@ class LoginFragment : Fragment() {
             validLogin = false
             //Tell user here
         }
+        Log.d(TAG, "RETURNING WITH VALUE OF $validLogin")
         return validLogin
     }
 

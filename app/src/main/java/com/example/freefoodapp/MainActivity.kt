@@ -3,6 +3,7 @@ package com.example.freefoodapp
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.TextUtils
 import android.util.Log
 import com.example.freefoodapp.firebase.Comment
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
     lateinit var DBComments: DatabaseReference
     lateinit var DBUsers: DatabaseReference //Registering
     lateinit var DBAuth: FirebaseAuth //Registering
+    lateinit var DBLikeRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,9 +64,10 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         DBUsers = DB.child("Users") //registering
 
         login("TestEmail2@kylem.org", "123456")
+        addLikeToPost("-MlSLcizbRZ5AMOgi8yA")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
-        DBPosts.orderByKey().addChildEventListener(commentListener)
+        DBComments.orderByKey().addChildEventListener(commentListener)
 
         //createNewAccount()
         if (currentFragment == null) {
@@ -81,7 +84,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+            //When post updates, such as the likes change
+            Log.d(TAG, "POST HAS RECIEVED AN UPDATE: " + snapshot.key)
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -104,7 +108,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+            //When post updates, such as the likes change
+            Log.d(TAG, "COMMENT HAS RECIEVED AN UPDATE: " + snapshot.key)
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -188,6 +193,32 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         }
 
         override fun onCancelled(databaseError: DatabaseError) {}
+    }
+
+    private fun addLikeToPost(givenPostID: String) {
+        DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
+        DBLikeRef.addListenerForSingleValueEvent(likeListener)
+    }
+
+   var likeListener: ValueEventListener = object: ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            var currentLikes: Int? = null
+            Log.d(TAG, "LIKES DATASNAP: $dataSnapshot")
+            for (snap in dataSnapshot.children) {
+                Log.d(TAG, "LIKES SNAP: $snap")
+                if(snap.key.equals("likes")) {
+                    currentLikes = (snap.value as Long).toInt()
+                }
+            }
+            Log.d(TAG, "Found Likes: $currentLikes")
+            //Now update it
+            if(currentLikes != null) {
+                var newLikes = currentLikes!! + 1
+                DBLikeRef.child("likes").setValue(newLikes)
+            }
+        }
+
+       override fun onCancelled(databaseError: DatabaseError) {}
     }
 
     private fun addPostToAList(dataSnapshot: DataSnapshot) {

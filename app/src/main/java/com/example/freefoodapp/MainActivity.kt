@@ -64,7 +64,8 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         DBUsers = DB.child("Users") //registering
 
         login("TestEmail2@kylem.org", "123456")
-        addLikeToPost("-MlSLcizbRZ5AMOgi8yA")
+        //addLikeToPost("-MlSLcizbRZ5AMOgi8yA")
+        //removeLikeToPost("-MlSLcizbRZ5AMOgi8yA")
 
         DBPosts.orderByKey().addChildEventListener(postListener)
         DBComments.orderByKey().addChildEventListener(commentListener)
@@ -200,6 +201,11 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         DBLikeRef.addListenerForSingleValueEvent(likeListener)
     }
 
+    private fun removeLikeToPost(givenPostID: String) {
+        DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
+        DBLikeRef.addListenerForSingleValueEvent(likeRemoveListener)
+    }
+
    var likeListener: ValueEventListener = object: ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             var currentLikes: Int? = null
@@ -219,6 +225,27 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         }
 
        override fun onCancelled(databaseError: DatabaseError) {}
+    }
+
+    var likeRemoveListener: ValueEventListener = object: ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            var currentLikes: Int? = null
+            Log.d(TAG, "LIKES DATASNAP REMOVE: $dataSnapshot")
+            for (snap in dataSnapshot.children) {
+                Log.d(TAG, "LIKES SNAP REMOVE: $snap")
+                if(snap.key.equals("likes")) {
+                    currentLikes = (snap.value as Long).toInt()
+                }
+            }
+            Log.d(TAG, "Found Likes: $currentLikes")
+            //Now update it
+            if(currentLikes != null) {
+                var newLikes = currentLikes!! - 1
+                DBLikeRef.child("likes").setValue(newLikes)
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {}
     }
 
     private fun addPostToAList(dataSnapshot: DataSnapshot) {

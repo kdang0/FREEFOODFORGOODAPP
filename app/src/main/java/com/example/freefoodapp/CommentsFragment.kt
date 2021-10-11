@@ -22,6 +22,7 @@ import java.util.*
 
 private const val TAG = "CommentsFragment"
 private const val ARG_USERNAME = "User_Username"
+private const val ARG_POSTID = "Post_ID"
 
 class CommentsFragment: Fragment() {
     private lateinit var eventName: TextView
@@ -32,6 +33,7 @@ class CommentsFragment: Fragment() {
     lateinit var DB: DatabaseReference //Registering
     lateinit var DBComments: DatabaseReference
     private var username: String = ""
+    private var originPost: String = ""
     private var adapter: CommentsFragment.CommentsAdapter? = CommentsAdapter(emptyList())
     private var comments: MutableList<Comment> = emptyList<Comment>().toMutableList()
     private var commentContent: String = ""
@@ -42,6 +44,7 @@ class CommentsFragment: Fragment() {
         DBComments = DB.child(DatabaseVars.FIREBASE_COMMENTS)
         DBComments.orderByKey().addChildEventListener(commentListener)
         username = arguments?.getSerializable(ARG_USERNAME) as String
+        originPost = arguments?.getSerializable(ARG_POSTID) as String
     }
 
     override fun onCreateView(
@@ -58,8 +61,7 @@ class CommentsFragment: Fragment() {
         commentsRecyclerView.layoutManager = LinearLayoutManager(context)
         commentsRecyclerView.adapter = adapter
         comment.setOnClickListener {
-            var postID: String = ""
-            createComment(commentContent, username, postID)
+            createComment(commentContent, username, originPost)
         }
         return view
     }
@@ -130,11 +132,13 @@ class CommentsFragment: Fragment() {
         comment.postID = map.get("postID") as String?
         comment.content = map.get("content") as String?
         comment.user = map.get("user") as String?
-        comments.add(comment)
-        //toDoItemList!!.add(todoItem);
-        //Put the new post somewhere
-        Log.d(TAG, "New comment added: ${comment.id}")
-        updateUI(comments)
+        if (comment.postID == originPost) {
+            comments.add(comment)
+            //toDoItemList!!.add(todoItem);
+            //Put the new post somewhere
+            Log.d(TAG, "New comment added: ${comment.id}")
+            updateUI(comments)
+        }
         // adapter.notifyDataSetChanged()
         //Do something here to update post view
     }
@@ -186,6 +190,18 @@ class CommentsFragment: Fragment() {
 
         override fun getItemCount(): Int {
             return comments.size
+        }
+    }
+
+    companion object {
+        fun newInstance(userName: String, postID: String): FoodEventFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_USERNAME, userName)
+                putSerializable(ARG_POSTID, postID)
+            }
+            return FoodEventFragment().apply {
+                arguments = args
+            }
         }
     }
 

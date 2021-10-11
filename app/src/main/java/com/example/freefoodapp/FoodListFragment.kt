@@ -21,6 +21,7 @@ private const val ARG_USERNAME = "User_Username"
 class FoodListFragment: Fragment() {
     interface MainCallbacks {
         fun onEventSelected(email: String, userName: String, post: Post)
+        fun onCreateEvent(email: String, userName: String)
     }
     private var callbacks: MainCallbacks? = null
     private lateinit var foodRecyclerView: RecyclerView

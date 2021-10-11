@@ -2,6 +2,7 @@ package com.example.freefoodapp
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
 private const val TAG = "FoodEventFragment"
 private const val ARG_EMAIL = "User_Email"
@@ -39,6 +39,7 @@ class FoodEventFragment: Fragment() {
     private var email: String = ""
     private var username: String = ""
     private lateinit var post: Post
+    lateinit var DBLikeRef: DatabaseReference
 
     interface MainCallbacks {
         fun onGoToComments(userName: String, postID: String)
@@ -86,10 +87,10 @@ class FoodEventFragment: Fragment() {
             post.id?.let { it1 -> mainCallbacks?.onGoToComments(username, it1) }
         }
         likeEvent.setOnClickListener {
-            //increase likes by one
+            post.id?.let { it1 -> addLikeToPost(it1) }
         }
         dislikeEvent.setOnClickListener {
-            //decrease likes by one
+            post.id?.let { it1 -> removeLikeToPost(it1) }
         }
         return view
     }
@@ -100,6 +101,58 @@ class FoodEventFragment: Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+    }
+
+    private fun addLikeToPost(givenPostID: String) {
+        DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
+        DBLikeRef.addListenerForSingleValueEvent(likeListener)
+    }
+
+    private fun removeLikeToPost(givenPostID: String) {
+        DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
+        DBLikeRef.addListenerForSingleValueEvent(likeRemoveListener)
+    }
+
+    var likeListener: ValueEventListener = object: ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            var currentLikes: Int? = null
+            Log.d(TAG, "LIKES DATASNAP: $dataSnapshot")
+            for (snap in dataSnapshot.children) {
+                Log.d(TAG, "LIKES SNAP: $snap")
+                if(snap.key.equals("likes")) {
+                    currentLikes = (snap.value as Long).toInt()
+                }
+            }
+            Log.d(TAG, "Found Likes: $currentLikes")
+            //Now update it
+            if(currentLikes != null) {
+                var newLikes = currentLikes!! + 1
+                DBLikeRef.child("likes").setValue(newLikes)
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {}
+    }
+
+    var likeRemoveListener: ValueEventListener = object: ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            var currentLikes: Int? = null
+            Log.d(TAG, "LIKES DATASNAP REMOVE: $dataSnapshot")
+            for (snap in dataSnapshot.children) {
+                Log.d(TAG, "LIKES SNAP REMOVE: $snap")
+                if(snap.key.equals("likes")) {
+                    currentLikes = (snap.value as Long).toInt()
+                }
+            }
+            Log.d(TAG, "Found Likes: $currentLikes")
+            //Now update it
+            if(currentLikes != null) {
+                var newLikes = currentLikes!! - 1
+                DBLikeRef.child("likes").setValue(newLikes)
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {}
     }
 
     companion object {

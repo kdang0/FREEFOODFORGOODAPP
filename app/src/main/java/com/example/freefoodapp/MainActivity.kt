@@ -41,7 +41,7 @@ private var storageRef: StorageReference? = null
 private var uploadableFilePath: String? = null
 
 class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks,
-    FoodListFragment.MainCallbacks, FoodEventCreateFragment.MainCallbacks {
+    FoodListFragment.MainCallbacks, FoodEventCreateFragment.MainCallbacks, FoodEventFragment.MainCallbacks {
 
     lateinit var DB: DatabaseReference //Registering
     lateinit var DBPosts: DatabaseReference
@@ -390,6 +390,16 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
 
     override fun onPost(accountName: String, userName: String) {
         val fragment = FoodListFragment.newInstance(accountName, userName)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onGoToComments(userName: String, postID: String) {
+        val fragment = CommentsFragment.newInstance(userName, postID)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
+    }
+
+    override fun onCreateEvent(email: String, userName: String) {
+        val fragment = FoodEventCreateFragment.newInstance(email, userName)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 }

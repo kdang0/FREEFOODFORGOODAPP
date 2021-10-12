@@ -69,10 +69,7 @@ class RegistrationFragment: Fragment() {
         passwordEditText = view.findViewById(R.id.password) as EditText
         confirmPasswordEditText = view.findViewById(R.id.confirmPassword) as EditText
         signupButton.setOnClickListener {
-            var accountMade: Boolean = createNewAccount()
-            if (accountMade) {
-                mainCallbacks?.onRegister()
-            }
+            createNewAccount()
         }
         return view
     }
@@ -174,12 +171,11 @@ class RegistrationFragment: Fragment() {
         return isCreated
     }
 
-    private fun createNewAccount(): Boolean {
+    private fun createNewAccount() {
         Log.d(TAG, "Creating new account...")
         var username = this.username
         var email = this.emailAddress
         var password = this.password
-        var isCreated: Boolean = true
 
         if(!username!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
             DBAuth!!
@@ -190,19 +186,17 @@ class RegistrationFragment: Fragment() {
                         val userId = DBAuth!!.currentUser!!.uid
                         val currentUserDb = DBUsers!!.child(userId)
                         currentUserDb.child("username").setValue(username)
+                        mainCallbacks?.onRegister()
                     } else {
                         Log.w(TAG, "Creating user failed: ", task.exception)
-                        isCreated = false
                     }
                 }
         }
         else
         {
             Log.d(TAG, "A field was empty when trying to create an account")
-            isCreated = false
         }
         Log.d(TAG, "Creating done for new account...")
-        return isCreated
     }
 
     companion object {

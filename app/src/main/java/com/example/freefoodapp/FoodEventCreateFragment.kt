@@ -1,7 +1,12 @@
 package com.example.freefoodapp
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,9 +29,11 @@ import java.util.*
 private const val TAG = "FoodEventCreateFragment"
 private const val ARG_EMAIL = "User_Email"
 private const val ARG_USERNAME = "User_Username"
+private const val REQUEST_PHOTO = 2
 
 class FoodEventCreateFragment: Fragment() {
     private lateinit var photoFile : File
+    private lateinit var photoUri : Uri
     private lateinit var nameTextView: TextView
     private lateinit var locationTextView: TextView
     private lateinit var dateTimeTextView: TextView
@@ -92,9 +99,9 @@ class FoodEventCreateFragment: Fragment() {
             createPost(descrip, name, imageAsString, loc, username)
             mainCallbacks?.onPost(email, username)
         }
-        uploadImage.setOnClickListener {
-            //image stuff
-        }
+//        uploadImage.setOnClickListener {
+//            //image stuff
+//        }
         return view
     }
 
@@ -204,6 +211,37 @@ class FoodEventCreateFragment: Fragment() {
             }
         }
         editTextTime.addTextChangedListener(timeTextWatcher)
+
+        uploadImage.apply {
+            val packageManager : PackageManager =
+                requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity : ResolveInfo? =
+                packageManager.resolveActivity(captureImage,
+                PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null){
+                isEnabled = false
+            }
+
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                val cameraActivities : List<ResolveInfo> =
+                    packageManager.queryIntentActivities(
+                        captureImage,
+                        PackageManager.MATCH_DEFAULT_ONLY)
+
+                for(cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                }
+                    startActivityForResult(captureImage, REQUEST_PHOTO)
+
+
+            }
+        }
     }
 
     fun createPost(description: String, name: String, image: String, location: String, user: String) {

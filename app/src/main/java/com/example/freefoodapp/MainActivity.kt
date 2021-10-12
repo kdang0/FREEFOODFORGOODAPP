@@ -37,8 +37,8 @@ var globalUserName: String? = null
 
 //Image Upload vars
 private var firebaseStore: FirebaseStorage? = null
-private var storageRef: StorageReference? = null
-private var uploadableFilePath: String? = null
+var storageRef: StorageReference? = null
+var uploadableFilePath: String? = null
 
 class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks,
     FoodListFragment.MainCallbacks, FoodEventCreateFragment.MainCallbacks, FoodEventFragment.MainCallbacks {

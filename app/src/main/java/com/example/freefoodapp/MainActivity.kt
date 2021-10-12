@@ -5,25 +5,12 @@ import android.os.Bundle
 import android.util.Log
 
 import com.example.freefoodapp.firebase.Post
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 private const val TAG = "MainActivity"
 
-//register vars
-private var username: String? = null
-private var email: String? = null
-private var password: String? = null
-
-//login vars
-private var loginEmail: String? = null
-private var loginPassword: String? = null
 var globalUserName: String? = null
-
-//Image Upload vars
-private var firebaseStore: FirebaseStorage? = null
 var storageRef: StorageReference? = null
-var uploadableFilePath: String? = null
 
 class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, RegistrationFragment.MainCallbacks, ConfirmationFragment.MainCallbacks,
     FoodListFragment.MainCallbacks, FoodEventCreateFragment.MainCallbacks, FoodEventFragment.MainCallbacks {

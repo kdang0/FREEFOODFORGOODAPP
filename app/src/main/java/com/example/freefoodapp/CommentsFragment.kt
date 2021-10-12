@@ -145,7 +145,7 @@ class CommentsFragment: Fragment() {
         comment.postID = map.get("postID") as String?
         comment.content = map.get("content") as String?
         comment.user = map.get("user") as String?
-        if (comment.postID == originPost) {
+        if (isOfPost(comment)) {
             comments.add(comment)
             //toDoItemList!!.add(todoItem);
             //Put the new post somewhere
@@ -167,6 +167,10 @@ class CommentsFragment: Fragment() {
         comment.id = newComment.key
         newComment.setValue(comment)
         Log.d(TAG, "Comment uploaded to cloud")
+    }
+
+    fun isOfPost(comment: Comment): Boolean {
+        return (comment.postID == originPost)
     }
 
     private inner class CommentHolder(view: View) : RecyclerView.ViewHolder(view) {

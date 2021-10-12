@@ -69,7 +69,10 @@ class RegistrationFragment: Fragment() {
         passwordEditText = view.findViewById(R.id.password) as EditText
         confirmPasswordEditText = view.findViewById(R.id.confirmPassword) as EditText
         signupButton.setOnClickListener {
-            createNewAccount()
+            var samePassword: Boolean = verifyPassword()
+            if (samePassword) {
+                createNewAccount()
+            }
         }
         return view
     }
@@ -160,6 +163,11 @@ class RegistrationFragment: Fragment() {
             }
         }
         confirmPasswordEditText.addTextChangedListener(confirmTextWatcher)
+    }
+
+    private fun verifyPassword(): Boolean {
+        var samePassword: Boolean = (password == confirmedPassword)
+        return samePassword
     }
 
     private fun createAccount(): Boolean {

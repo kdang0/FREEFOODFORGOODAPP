@@ -13,6 +13,7 @@ import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
 import java.util.*
+import kotlin.collections.HashMap
 
 private const val TAG = "FoodListFragment"
 private const val ARG_EMAIL = "User_Email"
@@ -83,7 +84,12 @@ class FoodListFragment: Fragment() {
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
             Log.d(TAG, "POST HAS RECIEVED AN UPDATE: " + snapshot.key)
-
+            for (post in posts) {
+                if(post.id.equals(snapshot.key)) {
+                    post.likes = (snapshot.getValue() as HashMap<String, Any>).get("likes") as Long
+                }
+            }
+            adapter!!.update(posts)
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {

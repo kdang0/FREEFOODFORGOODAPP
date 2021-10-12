@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         //createPost("This is a test post", "Cheese at fountain", "test", "DAKA", "iGJahlqUBTPI0ipaydHnmmNERnC3")
         //deletePostByID("-MlSLcizbRZ5AMOgi8yA")
 
-        DBPosts.orderByKey().addChildEventListener(postListener)
         DBComments.orderByKey().addChildEventListener(commentListener)
 
         //createNewAccount()
@@ -78,30 +77,6 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
             val fragment = LoginFragment.newInstance()
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
                 .commit()
-        }
-    }
-
-    val postListener = object : ChildEventListener {
-        override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            Log.d(TAG, "onChildAdded posts:" + dataSnapshot.key!!)
-            addPostToAList(dataSnapshot)
-        }
-
-        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            //When post updates, such as the likes change
-            Log.d(TAG, "POST HAS RECIEVED AN UPDATE: " + snapshot.key)
-        }
-
-        override fun onChildRemoved(snapshot: DataSnapshot) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            Log.w(TAG, "postListener error: ", error.toException())
         }
     }
 
@@ -249,34 +224,6 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         }
 
         override fun onCancelled(databaseError: DatabaseError) {}
-    }
-
-    private fun addPostToAList(dataSnapshot: DataSnapshot) {
-        val map = dataSnapshot.getValue() as HashMap<String, Any>
-        Log.d(TAG, "map contans: $map")
-
-        var id = dataSnapshot.key
-        var user = map.get("user") as String?
-        var dateMap = map.get("date") as HashMap<String, Any>
-
-        var tempDate = Date()
-
-        var time = (dateMap.get("time") as Long)
-        var date = tempDate
-        Log.d(TAG, "dateMap: $dateMap")
-        Log.d(TAG, "createdDate: $tempDate")
-
-        var location = map.get("location") as String?
-        var likes: Long = map.get("likes") as Long
-        var image = map.get("image") as String?
-        var name = map.get("name") as String?
-        var description = map.get("description") as String?
-        val post = Post(id,date,description,image,likes,location,name,user)
-        //toDoItemList!!.add(todoItem);
-        //Put the new post somewhere
-        Log.d(TAG, "New post added: $post.id}")
-        // adapter.notifyDataSetChanged()
-        //Do something here to update post view
     }
 
     private fun addCommentToAList(dataSnapshot: DataSnapshot) {

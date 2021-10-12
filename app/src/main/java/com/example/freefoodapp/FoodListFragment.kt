@@ -82,7 +82,8 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+            Log.d(TAG, "POST HAS RECIEVED AN UPDATE: " + snapshot.key)
+
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {

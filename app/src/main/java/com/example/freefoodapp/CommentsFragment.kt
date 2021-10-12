@@ -26,6 +26,7 @@ import android.app.Activity
 private const val TAG = "CommentsFragment"
 private const val ARG_USERNAME = "User_Username"
 private const val ARG_POSTID = "Post_ID"
+private const val ARG_POSTNAME = "Post_Name"
 
 class CommentsFragment: Fragment() {
     private lateinit var eventName: TextView
@@ -40,6 +41,7 @@ class CommentsFragment: Fragment() {
     private var adapter: CommentsFragment.CommentsAdapter? = CommentsAdapter(emptyList())
     private var comments: MutableList<Comment> = emptyList<Comment>().toMutableList()
     private var commentContent: String = ""
+    private var postName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,7 @@ class CommentsFragment: Fragment() {
         DBComments.orderByKey().addChildEventListener(commentListener)
         username = arguments?.getSerializable(ARG_USERNAME) as String
         originPost = arguments?.getSerializable(ARG_POSTID) as String
+        postName = arguments?.getSerializable(ARG_POSTNAME) as String
     }
 
     override fun onCreateView(
@@ -63,6 +66,7 @@ class CommentsFragment: Fragment() {
         comment = view.findViewById(R.id.comment) as Button
         commentsRecyclerView.layoutManager = LinearLayoutManager(context)
         commentsRecyclerView.adapter = adapter
+        eventName.setText(postName)
         comment.setOnClickListener {
 
             val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -200,10 +204,11 @@ class CommentsFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(userName: String, postID: String): CommentsFragment {
+        fun newInstance(userName: String, postID: String, postName: String): CommentsFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_USERNAME, userName)
                 putSerializable(ARG_POSTID, postID)
+                putSerializable(ARG_POSTNAME, postName)
             }
             return CommentsFragment().apply {
                 arguments = args

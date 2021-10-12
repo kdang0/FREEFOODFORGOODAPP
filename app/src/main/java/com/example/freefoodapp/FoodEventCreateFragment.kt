@@ -271,7 +271,7 @@ class FoodEventCreateFragment: Fragment() {
 
     private fun uploadImageToFirebase(pathToUploadFile: Uri){
         if(pathToUploadFile != null){
-            Log.d(TAG, "hi")
+            Log.d(TAG, "acceptable URI:" + photoUri.toString())
             val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
             val uploadImgTask = reference?.putFile(pathToUploadFile!!)
             val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
@@ -286,17 +286,40 @@ class FoodEventCreateFragment: Fragment() {
                     val uri = task.result
                     //Do something with the uri
                     uploadableFilePath = uri.toString()
+                    Log.d(TAG,"got it")
                     postEvent.isEnabled = true
                 } else {
                     Log.d(TAG, "An error occured uploading a file")
                 }
             }?.addOnFailureListener{
                 //Put something here for another failure?
+                Log.d(TAG, "Why it no work")
             }
+            Log.d(TAG,"Nothing happened...")
         }else{
             Log.d(TAG, "You need to upload an image")
         }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if(requestCode == REQUEST_PHOTO){
+////            Log.d(TAG, photoUri.toString())
+//            updatePhotoView()
+//        }
+//    }
+
+//    private fun updatePhotoView() {
+//        if(photoFile.exists()) {
+//            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+//            val rotbitmap = orientBitmap(photoFile.path, bitmap)
+//            eventImage.setImageBitmap(rotbitmap)
+//
+//        } else {
+//            eventImage.setImageDrawable(null)
+//        }
+//    }
+
 
     companion object {
         fun newInstance(accountName: String, userName: String): FoodEventCreateFragment {

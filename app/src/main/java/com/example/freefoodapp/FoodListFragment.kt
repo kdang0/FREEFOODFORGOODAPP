@@ -45,6 +45,7 @@ class FoodListFragment: Fragment() {
         DBPosts.orderByKey().addChildEventListener(postListener)
         username = arguments?.getSerializable(ARG_USERNAME) as String
         email = arguments?.getSerializable(ARG_EMAIL) as String
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -187,6 +188,12 @@ class FoodListFragment: Fragment() {
             adapter!!.notifyDataSetChanged()
         }
     }
+
+    override fun onCreateOptionsMenu(menu : Menu, inflater : MenuInflater){
+        super.onCreateOptionsMenu(menu,inflater)
+        inflater.inflate(R.menu.food_event_list, menu)
+    }
+
 
     companion object {
         fun newInstance(accountName: String, userName: String): FoodListFragment {

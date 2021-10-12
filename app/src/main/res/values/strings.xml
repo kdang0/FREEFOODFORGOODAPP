@@ -5,6 +5,7 @@
     <string name = "eventDesc">Event Description</string>
     <string name = "eventTime">Event Time</string>
     <string name = "numOfLikes">0</string>
+    <string name = "newFoodEvent">New Food Event</string>
     <string name = "eventLocation">Event Location</string>
     <string name = "displayName">Display Name</string>
     <string name = "commentDT">Date and Time</string>

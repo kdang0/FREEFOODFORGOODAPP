@@ -1,112 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
- <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.425"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.464" />
 
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username:"
-        app:layout_constraintBottom_toTopOf="@+id/emailTextView"
-        app:layout_constraintEnd_toStartOf="@+id/username"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+   <androidx.constraintlayout.widget.ConstraintLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="match_parent"
+       android:layout_height="348dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.304"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.0">
 
-    <TextView
-        android:id="@+id/emailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="Email:"
-        app:layout_constraintBottom_toTopOf="@+id/passwordTextView"
-        app:layout_constraintEnd_toStartOf="@+id/emailaddress"
-        app:layout_constraintHorizontal_bias="0.565"
-        app:layout_constraintStart_toStartOf="parent" />
+   <TextView
+       android:id="@+id/emailTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="36dp"
+       android:layout_marginBottom="32dp"
+       android:fontFamily="@font/leaguespartan"
+       android:text="Email:"
+       app:layout_constraintBottom_toTopOf="@+id/passwordTextView"
+       app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/passwordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="Password:"
-        app:layout_constraintBottom_toTopOf="@+id/confirmTextView"
-        app:layout_constraintEnd_toStartOf="@+id/password"
-        app:layout_constraintHorizontal_bias="0.382"
-        app:layout_constraintStart_toStartOf="parent" />
+   <TextView
+       android:id="@+id/confirmTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginEnd="8dp"
+       android:layout_marginBottom="96dp"
+       android:fontFamily="@font/leaguespartan"
+       android:text="Confirm Password:"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toStartOf="@+id/confirmPassword" />
 
-    <TextView
-        android:id="@+id/confirmTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="380dp"
-        android:text="Confirm Password:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/confirmPassword"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent" />
+   <TextView
+       android:id="@+id/passwordTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginBottom="44dp"
+       android:fontFamily="@font/leaguespartan"
+       android:text="Password:"
+       app:layout_constraintBottom_toTopOf="@+id/confirmTextView"
+       app:layout_constraintEnd_toStartOf="@+id/password"
+       app:layout_constraintHorizontal_bias="0.76"
+       app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/emailaddress"
-        android:layout_width="262dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="12dp"
-        android:hint="type email"
-        app:layout_constraintBottom_toTopOf="@+id/password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+   <EditText
+       android:id="@+id/confirmPassword"
+       android:layout_width="221dp"
+       android:layout_height="51dp"
+       android:layout_marginTop="20dp"
+       android:layout_marginEnd="32dp"
+       android:ems="10"
+       android:fontFamily="@font/leaguespartan"
+       android:hint="confirm password"
+       android:inputType="textPassword"
+       app:layout_constraintBottom_toTopOf="@+id/signup"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/password"
+       app:layout_constraintVertical_bias="0.0" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/username"
-        android:layout_width="207dp"
-        android:layout_height="44dp"
-        android:layout_marginEnd="112dp"
-        android:hint="type username"
-        app:layout_constraintBottom_toTopOf="@+id/emailaddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
+   <TextView
+       android:id="@+id/usernameTextView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:fontFamily="@font/leaguespartan"
+       android:text="Username:"
+       app:layout_constraintBottom_toTopOf="@+id/emailTextView"
+       app:layout_constraintEnd_toStartOf="@+id/username"
+       app:layout_constraintHorizontal_bias="0.863"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.602" />
 
-    <EditText
-        android:id="@+id/confirmPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:ems="10"
-        android:hint = "confirm password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338" />
+   <com.google.android.material.textfield.TextInputEditText
+       android:id="@+id/username"
+       android:layout_width="211dp"
+       android:layout_height="50dp"
+       android:layout_marginTop="32dp"
+       android:layout_marginEnd="100dp"
+       android:fontFamily="@font/leaguespartan"
+       android:hint="type username"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint = "type password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/confirmPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+   <EditText
+       android:id="@+id/password"
+       android:layout_width="218dp"
+       android:layout_height="49dp"
+       android:layout_marginEnd="92dp"
+       android:layout_marginBottom="96dp"
+       android:ems="10"
+       android:hint="type password"
+       android:fontFamily="@font/leaguespartan"
+       android:inputType="textPassword"
+       app:layout_constraintBottom_toTopOf="@+id/signup"
+       app:layout_constraintEnd_toEndOf="parent" />
+
+   <Button
+          android:id="@+id/signup"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Sign Up"
+          android:fontFamily="@font/leaguespartan"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.424"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.946" />
+
+   <com.google.android.material.textfield.TextInputEditText
+       android:id="@+id/emailaddress"
+       android:layout_width="265dp"
+       android:layout_height="52dp"
+       android:layout_marginBottom="4dp"
+       android:fontFamily="@font/leaguespartan"
+       android:hint="type email"
+       app:layout_constraintBottom_toTopOf="@+id/password"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.215"
+       app:layout_constraintStart_toEndOf="@+id/emailTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

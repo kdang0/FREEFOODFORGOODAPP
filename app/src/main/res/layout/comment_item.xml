@@ -6,11 +6,23 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/textView"
+        android:layout_width="411dp"
+        android:layout_height="216dp"
+        android:background="@drawable/border"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/comdatetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/commentDT"
         android:layout_marginLeft="500dp"
+        android:fontFamily="@font/leaguespartan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -24,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:maxLines="999"
+        android:fontFamily="@font/leaguespartan"
             android:text="@string/commentdescr"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="11dp"
             android:text="@string/displayName"
+            android:textSize="15dp"
+            android:fontFamily="@font/leaguespartan"
             app:layout_constraintBottom_toTopOf="@+id/commentdesc"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

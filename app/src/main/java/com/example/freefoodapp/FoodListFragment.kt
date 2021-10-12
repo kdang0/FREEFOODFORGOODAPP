@@ -17,6 +17,7 @@ import java.util.*
 private const val TAG = "FoodListFragment"
 private const val ARG_EMAIL = "User_Email"
 private const val ARG_USERNAME = "User_Username"
+//private const val ARG_POST = "Post"
 
 class FoodListFragment: Fragment() {
     interface MainCallbacks {
@@ -70,16 +71,19 @@ class FoodListFragment: Fragment() {
     private fun updateUI(posts : List<Post>) {
         adapter = FoodEventAdapter(posts)
         foodRecyclerView.adapter = adapter
+        Log.d(TAG, "POSTS IN LIST: $posts")
     }
 
     val postListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
             Log.d(TAG, "onChildAdded posts:" + dataSnapshot.key!!)
             addPostToAList(dataSnapshot)
+            adapter!!.update(posts)
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+            Log.d(TAG, "POST HAS RECIEVED AN UPDATE: " + snapshot.key)
+
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -96,26 +100,26 @@ class FoodListFragment: Fragment() {
     }
 
     private fun addPostToAList(dataSnapshot: DataSnapshot) {
-        val post = Post.createPost()
         val map = dataSnapshot.getValue() as HashMap<String, Any>
         Log.d(TAG, "map contans: $map")
 
-        post.id = dataSnapshot.key
-        post.user = map.get("user") as String?
+        var id = dataSnapshot.key
+        var user = map.get("user") as String?
         var dateMap = map.get("date") as HashMap<String, Any>
 
         var tempDate = Date()
 
-        tempDate.time = (dateMap.get("time") as Long)
-        post.date = tempDate
+        var time = (dateMap.get("time") as Long)
+        var date = tempDate
         Log.d(TAG, "dateMap: $dateMap")
         Log.d(TAG, "createdDate: $tempDate")
 
-        post.location = map.get("location") as String?
-        post.likes = map.get("likes") as Long?
-        post.image = map.get("image") as String?
-        post.name = map.get("name") as String?
-        post.description = map.get("description") as String?
+        var location = map.get("location") as String?
+        var likes: Long = map.get("likes") as Long
+        var image = map.get("image") as String?
+        var name = map.get("name") as String?
+        var description = map.get("description") as String?
+        val post = Post(id,date,description,image,likes,location,name,user)
         posts.add(post)
         //toDoItemList!!.add(todoItem);
         //Put the new post somewhere
@@ -161,20 +165,26 @@ class FoodListFragment: Fragment() {
         }
     }
 
-    private inner class FoodEventAdapter(var posts: List<Post>) :
+    private inner class FoodEventAdapter(var postsPassed: List<Post>) :
         RecyclerView.Adapter<FoodEventHolder>() {
+        private var list: List<Post> = postsPassed
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodEventHolder {
             val view = layoutInflater.inflate(R.layout.food_event_item, parent, false)
             return FoodEventHolder(view)
         }
 
         override fun onBindViewHolder(holder: FoodEventHolder, position: Int) {
-            val post = posts[position]
+            val post = list[position]
             holder.bind(post)
         }
 
         override fun getItemCount(): Int {
-            return posts.size
+            return list.size
+        }
+
+        fun update(newPosts: List<Post>){
+            list = newPosts
+            adapter!!.notifyDataSetChanged()
         }
     }
 

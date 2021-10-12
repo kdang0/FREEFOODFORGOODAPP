@@ -116,9 +116,10 @@ class FoodEventCreateFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE.jpg")
+        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE0.jpg")
         photoUri =  FileProvider.getUriForFile(requireActivity(),
-        "com.example.freefoodapp", photoFile)
+            "com.example.freefoodapp", photoFile)
+
     }
 
     override fun onDetach() {
@@ -224,7 +225,6 @@ class FoodEventCreateFragment: Fragment() {
             }
         }
         editTextTime.addTextChangedListener(timeTextWatcher)
-
         uploadImage.apply {
             val packageManager : PackageManager =
                 requireActivity().packageManager
@@ -251,7 +251,7 @@ class FoodEventCreateFragment: Fragment() {
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
-                    uploadImageToFirebase(photoUri)
+                //uploadImageToFirebase(photoUri)
                     startActivityForResult(captureImage, REQUEST_PHOTO)
             }
         }
@@ -307,24 +307,25 @@ class FoodEventCreateFragment: Fragment() {
         }
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if(requestCode == REQUEST_PHOTO){
-////            Log.d(TAG, photoUri.toString())
-//            updatePhotoView()
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_PHOTO){
+//            Log.d(TAG, photoUri.toString())
+            updatePhotoView()
+            uploadImageToFirebase(photoUri)
+        }
+    }
 
-//    private fun updatePhotoView() {
-//        if(photoFile.exists()) {
-//            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-//            val rotbitmap = orientBitmap(photoFile.path, bitmap)
-//            eventImage.setImageBitmap(rotbitmap)
-//
-//        } else {
-//            eventImage.setImageDrawable(null)
-//        }
-//    }
+    private fun updatePhotoView() {
+        if(photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            val rotbitmap = orientBitmap(photoFile.path, bitmap)
+            eventImage.setImageBitmap(rotbitmap)
+
+        } else {
+            eventImage.setImageDrawable(null)
+        }
+    }
 
 
     companion object {

@@ -60,6 +60,7 @@ class FoodListFragment: Fragment() {
         foodRecyclerView = view.findViewById(R.id.foodRecyclerView) as RecyclerView
         foodRecyclerView.layoutManager = LinearLayoutManager(context)
         foodRecyclerView.adapter = adapter
+
         return view
     }
 

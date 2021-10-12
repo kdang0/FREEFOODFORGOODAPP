@@ -97,6 +97,7 @@ class FoodEventFragment: Fragment() {
         dislikeEvent.setOnClickListener {
             post.id?.let { it1 -> removeLikeToPost(it1) }
         }
+        Log.d(TAG, post.image.toString())
         Glide.with(eventImage)
             .load(post.image)
             .into(eventImage)
@@ -105,6 +106,9 @@ class FoodEventFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        Glide.with(eventImage)
+//            .load(post.image)
+//            .into(eventImage)
     }
 
     override fun onDetach() {

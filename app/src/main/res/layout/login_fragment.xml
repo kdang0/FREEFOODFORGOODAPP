@@ -7,15 +7,15 @@
 
     <ImageView
         android:id="@+id/loginImageView"
-        android:layout_width="219dp"
-        android:layout_height="201dp"
+        android:layout_width="298dp"
+        android:layout_height="199dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintHorizontal_bias="0.447"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.066"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="0.092"
+        app:srcCompat="@mipmap/freefoodlogo" />
 
     <LinearLayout
         android:layout_width="258dp"

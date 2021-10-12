@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import java.io.File
 import java.util.*
@@ -61,6 +63,7 @@ class FoodEventCreateFragment: Fragment() {
     private var email: String = ""
     private var username: String = ""
     private var uploadableFilePath: String? = null
+    private var storageRef: StorageReference? = null
 
     interface MainCallbacks {
         fun onPost(email: String, userName: String)
@@ -73,6 +76,7 @@ class FoodEventCreateFragment: Fragment() {
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         username = arguments?.getSerializable(ARG_USERNAME) as String
         email = arguments?.getSerializable(ARG_EMAIL) as String
+        storageRef = FirebaseStorage.getInstance().reference
     }
 
     override fun onAttach(context: Context) {
@@ -112,9 +116,10 @@ class FoodEventCreateFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE.jpg")
+        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE0.jpg")
         photoUri =  FileProvider.getUriForFile(requireActivity(),
-        "com.example.freefoodapp", photoFile)
+            "com.example.freefoodapp", photoFile)
+
     }
 
     override fun onDetach() {
@@ -220,7 +225,6 @@ class FoodEventCreateFragment: Fragment() {
             }
         }
         editTextTime.addTextChangedListener(timeTextWatcher)
-
         uploadImage.apply {
             val packageManager : PackageManager =
                 requireActivity().packageManager
@@ -247,7 +251,7 @@ class FoodEventCreateFragment: Fragment() {
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
-                    uploadImageToFirebase(photoUri)
+                //uploadImageToFirebase(photoUri)
                     startActivityForResult(captureImage, REQUEST_PHOTO)
             }
         }
@@ -270,33 +274,59 @@ class FoodEventCreateFragment: Fragment() {
     }
 
     private fun uploadImageToFirebase(pathToUploadFile: Uri){
-        if(pathToUploadFile != null){
-            Log.d(TAG, "hi")
+        if(photoUri != null){
+            Log.d(TAG, "acceptable URI:" + photoUri.toString())
             val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
-            val uploadImgTask = reference?.putFile(pathToUploadFile!!)
+            val uploadImgTask = reference?.putFile(photoUri!!)
             val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                Log.d(TAG, "Made it inside task")
                 if (!task.isSuccessful) {
                     task.exception?.let {
                         throw it
                     }
                 }
+                Log.d(TAG, "Task didn't fail")
                 return@Continuation reference.downloadUrl
             })?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val uri = task.result
                     //Do something with the uri
                     uploadableFilePath = uri.toString()
+                    Log.d(TAG,"got it")
                     postEvent.isEnabled = true
                 } else {
                     Log.d(TAG, "An error occured uploading a file")
                 }
             }?.addOnFailureListener{
                 //Put something here for another failure?
+                Log.d(TAG, "Why it no work")
             }
+            Log.d(TAG,"Nothing happened...")
         }else{
             Log.d(TAG, "You need to upload an image")
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == REQUEST_PHOTO){
+//            Log.d(TAG, photoUri.toString())
+            updatePhotoView()
+            uploadImageToFirebase(photoUri)
+        }
+    }
+
+    private fun updatePhotoView() {
+        if(photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            val rotbitmap = orientBitmap(photoFile.path, bitmap)
+            eventImage.setImageBitmap(rotbitmap)
+
+        } else {
+            eventImage.setImageDrawable(null)
+        }
+    }
+
 
     companion object {
         fun newInstance(accountName: String, userName: String): FoodEventCreateFragment {

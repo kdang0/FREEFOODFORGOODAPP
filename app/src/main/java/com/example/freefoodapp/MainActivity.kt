@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.TextUtils
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         //deletePostByID("-MlSLcizbRZ5AMOgi8yA")
 
         DBComments.orderByKey().addChildEventListener(commentListener)
+
 
         //createNewAccount()
         if (currentFragment == null) {

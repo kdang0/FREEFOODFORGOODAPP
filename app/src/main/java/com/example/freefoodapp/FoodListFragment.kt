@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
@@ -167,6 +169,9 @@ class FoodListFragment: Fragment() {
             eventDate.text = post.date.toString()
             eventName.text = post.name.toString()
             numOfLikes.text = post.likes.toString()
+            Glide.with(eventImage)
+                .load(post.image)
+                .into(eventImage)
         }
 
         override fun onClick(p0: View?) {

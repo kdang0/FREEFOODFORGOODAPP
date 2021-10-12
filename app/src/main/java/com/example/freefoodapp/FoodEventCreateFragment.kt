@@ -228,9 +228,10 @@ class FoodEventCreateFragment: Fragment() {
             val resolvedActivity : ResolveInfo? =
                 packageManager.resolveActivity(captureImage,
                 PackageManager.MATCH_DEFAULT_ONLY)
-            if (resolvedActivity == null){
-                isEnabled = false
-            }
+//            if (resolvedActivity == null){
+//                isEnabled = false
+//            }
+            //Removed so emulator camera is enabled.
 
             setOnClickListener {
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)

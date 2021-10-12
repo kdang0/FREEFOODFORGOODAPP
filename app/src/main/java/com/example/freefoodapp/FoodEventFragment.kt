@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.auth.FirebaseAuth
@@ -95,6 +96,9 @@ class FoodEventFragment: Fragment() {
         dislikeEvent.setOnClickListener {
             post.id?.let { it1 -> removeLikeToPost(it1) }
         }
+        Glide.with(eventImage)
+            .load(post.image)
+            .into(eventImage)
         return view
     }
 

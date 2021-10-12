@@ -174,10 +174,15 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onLongClick(p0: View?): Boolean {
-            post.id?.let { deletePostByID(it) }
-            posts.remove(post)
-            updateUI(posts)
-            return true
+            if(post.user == email) {
+                post.id?.let { deletePostByID(it) }
+                posts.remove(post)
+                updateUI(posts)
+                return true
+            }
+            else {
+                return false
+            }
         }
     }
 

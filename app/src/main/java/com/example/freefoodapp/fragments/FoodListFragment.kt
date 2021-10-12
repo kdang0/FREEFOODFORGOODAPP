@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.freefoodapp.R
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*

@@ -1,15 +1,12 @@
 package com.example.freefoodapp
 
-import android.util.Log
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.Post
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.freefoodapp.fragments.CommentsFragment
+import com.example.freefoodapp.fragments.RegistrationFragment
 import org.junit.Test
 
 import org.junit.Assert.*
-import org.junit.Before
 import java.util.*
 
 /**

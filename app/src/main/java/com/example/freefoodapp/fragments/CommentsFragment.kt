@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -15,12 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.freefoodapp.firebase.Comment
 import com.example.freefoodapp.firebase.DatabaseVars
-import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
 import java.util.*
-import android.app.Activity
-
-
+import com.example.freefoodapp.R
 
 
 private const val TAG = "CommentsFragment"
@@ -38,7 +35,7 @@ class CommentsFragment: Fragment() {
     lateinit var DBComments: DatabaseReference
     private var username: String = ""
     private var originPost: String = ""
-    private var adapter: CommentsFragment.CommentsAdapter? = CommentsAdapter(emptyList())
+    private var adapter: CommentsAdapter? = CommentsAdapter(emptyList())
     private var comments: MutableList<Comment> = emptyList<Comment>().toMutableList()
     private var commentContent: String = ""
     private var postName: String = ""

@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.freefoodapp.R
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 private const val TAG = "FoodEventFragment"
@@ -55,7 +55,7 @@ class FoodEventFragment: Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainCallbacks = context as FoodEventFragment.MainCallbacks?
+        mainCallbacks = context as MainCallbacks?
     }
 
     override fun onCreateView(

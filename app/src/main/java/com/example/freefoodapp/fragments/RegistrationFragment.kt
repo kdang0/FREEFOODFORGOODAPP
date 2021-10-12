@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.freefoodapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -50,7 +51,7 @@ class RegistrationFragment: Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainCallbacks = context as RegistrationFragment.MainCallbacks?
+        mainCallbacks = context as MainCallbacks?
     }
 
     override fun onCreateView(

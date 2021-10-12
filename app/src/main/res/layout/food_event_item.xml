@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="413dp"
-        android:layout_height="133dp"
+        android:layout_height="136dp"
         android:background="@drawable/border"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"

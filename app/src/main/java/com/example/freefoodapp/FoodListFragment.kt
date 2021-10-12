@@ -70,12 +70,14 @@ class FoodListFragment: Fragment() {
     private fun updateUI(posts : List<Post>) {
         adapter = FoodEventAdapter(posts)
         foodRecyclerView.adapter = adapter
+        Log.d(TAG, "POSTS IN LIST: $posts")
     }
 
     val postListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
             Log.d(TAG, "onChildAdded posts:" + dataSnapshot.key!!)
             addPostToAList(dataSnapshot)
+            adapter!!.update(posts)
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -161,20 +163,26 @@ class FoodListFragment: Fragment() {
         }
     }
 
-    private inner class FoodEventAdapter(var posts: List<Post>) :
+    private inner class FoodEventAdapter(var postsPassed: List<Post>) :
         RecyclerView.Adapter<FoodEventHolder>() {
+        private var list: List<Post> = postsPassed
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodEventHolder {
             val view = layoutInflater.inflate(R.layout.food_event_item, parent, false)
             return FoodEventHolder(view)
         }
 
         override fun onBindViewHolder(holder: FoodEventHolder, position: Int) {
-            val post = posts[position]
+            val post = list[position]
             holder.bind(post)
         }
 
         override fun getItemCount(): Int {
-            return posts.size
+            return list.size
+        }
+
+        fun update(newPosts: List<Post>){
+            list = newPosts
+            adapter!!.notifyDataSetChanged()
         }
     }
 

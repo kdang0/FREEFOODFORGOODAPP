@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.freefoodapp.R
+import com.example.freefoodapp.firebase.DatabaseVars
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -46,7 +47,7 @@ class RegistrationFragment: Fragment() {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
         DBAuth = FirebaseAuth.getInstance() //registering
-        DBUsers = DB.child("Users") //registering
+        DBUsers = DB.child(DatabaseVars.FIREBASE_USERS) //registering
     }
 
     override fun onAttach(context: Context) {

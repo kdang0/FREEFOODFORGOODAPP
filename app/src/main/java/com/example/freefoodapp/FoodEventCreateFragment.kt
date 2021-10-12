@@ -60,6 +60,7 @@ class FoodEventCreateFragment: Fragment() {
     private var descrip: String = ""
     private var email: String = ""
     private var username: String = ""
+    private var uploadableFilePath: String? = null
 
     interface MainCallbacks {
         fun onPost(email: String, userName: String)
@@ -99,10 +100,10 @@ class FoodEventCreateFragment: Fragment() {
         postEvent = view.findViewById(R.id.postEvent) as Button
         uploadImage = view.findViewById(R.id.uploadPost) as Button
         postEvent.setOnClickListener {
-            var imageAsString: String = ""
-            createPost(descrip, name, imageAsString, loc, username)
+            createPost(descrip, name, uploadableFilePath!!, loc, username)
             mainCallbacks?.onPost(email, username)
         }
+        postEvent.isEnabled = false
 //        uploadImage.setOnClickListener {
 //            //image stuff
 //        }
@@ -284,7 +285,7 @@ class FoodEventCreateFragment: Fragment() {
                     val uri = task.result
                     //Do something with the uri
                     uploadableFilePath = uri.toString()
-                    //TODO: Trigger something here to actually post. Possible call the createPost() here?
+                    postEvent.isEnabled = true
                 } else {
                     Log.d(TAG, "An error occured uploading a file")
                 }

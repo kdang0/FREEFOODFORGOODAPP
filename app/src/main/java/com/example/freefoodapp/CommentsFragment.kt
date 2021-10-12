@@ -1,5 +1,6 @@
 package com.example.freefoodapp
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,10 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +18,10 @@ import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
 import java.util.*
+import android.app.Activity
+
+
+
 
 private const val TAG = "CommentsFragment"
 private const val ARG_USERNAME = "User_Username"
@@ -61,7 +64,13 @@ class CommentsFragment: Fragment() {
         commentsRecyclerView.layoutManager = LinearLayoutManager(context)
         commentsRecyclerView.adapter = adapter
         comment.setOnClickListener {
+
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+
             createComment(commentContent, username, originPost)
+            userComment.setText("") //reset text in EditText to indicate post was sucessful
+            Toast.makeText(activity, "Comment Posted", Toast.LENGTH_SHORT).show() //Not currently working
         }
         return view
     }
@@ -105,15 +114,15 @@ class CommentsFragment: Fragment() {
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
-            TODO("Not yet implemented")
+
         }
 
         override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
+
         }
 
         override fun onCancelled(error: DatabaseError) {
@@ -154,9 +163,6 @@ class CommentsFragment: Fragment() {
         comment.id = newComment.key
         newComment.setValue(comment)
         Log.d(TAG, "Comment uploaded to cloud")
-
-        var d: Date = Date()
-
     }
 
     private inner class CommentHolder(view: View) : RecyclerView.ViewHolder(view) {

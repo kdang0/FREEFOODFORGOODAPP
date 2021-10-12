@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutCompat"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
 
 
     <TextView
@@ -47,8 +48,10 @@
 
     <TextView
         android:id="@+id/eventName"
+
         android:layout_width="270dp"
         android:layout_height="36dp"
+
         android:layout_marginStart="16dp"
         android:layout_marginEnd="164dp"
         android:layout_marginBottom="40dp"
@@ -69,19 +72,20 @@
         android:text="@string/eventDate"
         android:fontFamily="@font/leaguespartan"
         android:textSize="20sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/eventImage"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-            android:id="@+id/eventImage"
-            android:layout_width="110dp"
-            android:layout_height="100dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_gallery" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/eventImage"
+        android:layout_width="110dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 
 import com.example.freefoodapp.firebase.Post
+import com.example.freefoodapp.fragments.*
 import com.google.firebase.storage.StorageReference
 
 private const val TAG = "MainActivity"

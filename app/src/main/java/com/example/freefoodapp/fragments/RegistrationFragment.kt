@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.freefoodapp.R
+import com.example.freefoodapp.firebase.DatabaseVars
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -45,12 +47,12 @@ class RegistrationFragment: Fragment() {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
         DBAuth = FirebaseAuth.getInstance() //registering
-        DBUsers = DB.child("Users") //registering
+        DBUsers = DB.child(DatabaseVars.FIREBASE_USERS) //registering
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainCallbacks = context as RegistrationFragment.MainCallbacks?
+        mainCallbacks = context as MainCallbacks?
     }
 
     override fun onCreateView(
@@ -69,7 +71,10 @@ class RegistrationFragment: Fragment() {
         passwordEditText = view.findViewById(R.id.password) as EditText
         confirmPasswordEditText = view.findViewById(R.id.confirmPassword) as EditText
         signupButton.setOnClickListener {
-            createNewAccount()
+            var samePassword: Boolean = verifyPassword(password, confirmedPassword)
+            if (samePassword) {
+                createNewAccount()
+            }
         }
         return view
     }
@@ -160,6 +165,11 @@ class RegistrationFragment: Fragment() {
             }
         }
         confirmPasswordEditText.addTextChangedListener(confirmTextWatcher)
+    }
+
+    fun verifyPassword(password: String, confirmedPassword: String): Boolean {
+        var samePassword: Boolean = (password == confirmedPassword)
+        return samePassword
     }
 
     private fun createAccount(): Boolean {

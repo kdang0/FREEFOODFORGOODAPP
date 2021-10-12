@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -6,11 +6,11 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.freefoodapp.R
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
@@ -152,6 +152,18 @@ class FoodListFragment: Fragment() {
         DBPosts.child(postID).removeValue()
     }
 
+    fun deletePost(post: Post): Boolean {
+        if(post.user == email) {
+            post.id?.let { deletePostByID(it) }
+            posts.remove(post)
+            updateUI(posts)
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     private inner class FoodEventHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
         private lateinit var post: Post
         private val likesImageView : ImageView = itemView.findViewById(R.id.likesImageView)
@@ -181,15 +193,7 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onLongClick(p0: View?): Boolean {
-            if(post.user == email) {
-                post.id?.let { deletePostByID(it) }
-                posts.remove(post)
-                updateUI(posts)
-                return true
-            }
-            else {
-                return false
-            }
+            return deletePost(post)
         }
     }
 

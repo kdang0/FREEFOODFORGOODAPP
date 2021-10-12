@@ -1,4 +1,4 @@
-package com.example.freefoodapp
+package com.example.freefoodapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -14,9 +14,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.freefoodapp.R
+import com.example.freefoodapp.firebase.DatabaseVars
+import com.example.freefoodapp.globalUserName
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import java.util.*
 
 private const val TAG = "LoginFragment"
 
@@ -45,7 +47,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
         DBAuth = FirebaseAuth.getInstance() //registering
-        DBUsers = DB.child("Users") //registering
+        DBUsers = DB.child(DatabaseVars.FIREBASE_USERS) //registering
     }
 
     override fun onAttach(context: Context) {

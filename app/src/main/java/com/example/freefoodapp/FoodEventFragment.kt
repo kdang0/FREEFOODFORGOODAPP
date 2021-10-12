@@ -87,6 +87,7 @@ class FoodEventFragment: Fragment() {
         Log.d(TAG, "Email is: $email")
         commentEvent.setOnClickListener {
             Log.d(TAG, "email is: $email")
+            Log.d(TAG, "Username is: $username")
             Log.d(TAG, "Comment Clicked")
             post.id?.let { it1 -> mainCallbacks?.onGoToComments(username, it1) }
         }

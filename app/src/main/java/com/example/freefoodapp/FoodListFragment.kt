@@ -175,6 +175,7 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onClick(p0: View?) {
+            Log.d(TAG, "Username in list is: $username")
             callbacks?.onEventSelected(email, username, post)
         }
 

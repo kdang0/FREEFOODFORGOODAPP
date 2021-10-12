@@ -93,7 +93,16 @@ class FoodListFragment: Fragment() {
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
-            TODO("Not yet implemented")
+            Log.d(TAG, "DELETE REQUEST RECIEVED: " + snapshot.key)
+            var count = 0
+            for (post in posts) {
+                if(post.id.equals(snapshot.key)) {
+                    post.likes = (snapshot.getValue() as HashMap<String, Any>).get("likes") as Long
+                }
+                count++
+            }
+            posts.removeAt(count)
+            adapter!!.update(posts)
         }
 
         override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {

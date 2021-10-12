@@ -100,7 +100,7 @@ class FoodEventCreateFragment: Fragment() {
         postEvent = view.findViewById(R.id.postEvent) as Button
         uploadImage = view.findViewById(R.id.uploadPost) as Button
         postEvent.setOnClickListener {
-            createPost(descrip, name, uploadableFilePath!!, loc, username)
+            createPost(descrip, name, uploadableFilePath!!, loc, email)
             mainCallbacks?.onPost(email, username)
         }
         postEvent.isEnabled = false

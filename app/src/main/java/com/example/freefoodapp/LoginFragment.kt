@@ -145,7 +145,6 @@ class LoginFragment : Fragment() {
                     var temp = DBUsers.child("${task.result?.user?.uid}")
                     temp.addValueEventListener(userEventListener)
                     validLogin = true
-                    mainCallbacks?.onLogin(accountName, username)
                 }
                 else {
                     Log.d(TAG, "LOGIN FAILED: ${task.exception}")
@@ -171,6 +170,7 @@ class LoginFragment : Fragment() {
                     globalUserName = "${snap.getValue()}"
                     username = "${snap.getValue()}"
                     Log.d(TAG, "Username: $globalUserName")
+                    mainCallbacks?.onLogin(accountName, username)
                 }
             }
         }

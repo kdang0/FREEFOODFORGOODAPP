@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
 import com.google.firebase.auth.FirebaseAuth
@@ -86,6 +87,7 @@ class FoodEventFragment: Fragment() {
         Log.d(TAG, "Email is: $email")
         commentEvent.setOnClickListener {
             Log.d(TAG, "email is: $email")
+            Log.d(TAG, "Username is: $username")
             Log.d(TAG, "Comment Clicked")
             post.id?.let { it1 -> mainCallbacks?.onGoToComments(username, it1) }
         }
@@ -95,11 +97,18 @@ class FoodEventFragment: Fragment() {
         dislikeEvent.setOnClickListener {
             post.id?.let { it1 -> removeLikeToPost(it1) }
         }
+        Log.d(TAG, post.image.toString())
+        Glide.with(eventImage)
+            .load(post.image)
+            .into(eventImage)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        Glide.with(eventImage)
+//            .load(post.image)
+//            .into(eventImage)
     }
 
     override fun onDetach() {

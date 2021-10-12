@@ -31,14 +31,17 @@
             android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email:" />
+            android:text="Email:"
+            android:fontFamily="@font/leaguespartan"
+            />
 
         <EditText
             android:id="@+id/editTextTextEmailAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:fontFamily="@font/leaguespartan"/>
 
     </LinearLayout>
 
@@ -60,7 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Login" />
+            android:text="Login"
+            android:fontFamily="@font/leaguespartan"/>
 
         <Button
             android:id="@+id/registerButton"
@@ -68,7 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:text="Register" />
+            android:text="Register"
+            android:fontFamily="@font/leaguespartan"/>
 
     </LinearLayout>
 
@@ -89,7 +94,8 @@
             android:layout_height="31dp"
             android:layout_marginTop="75dp"
             android:layout_marginBottom="232dp"
-            android:text="Password:" />
+            android:text="Password:"
+            android:fontFamily="@font/leaguespartan"/>
 
         <EditText
             android:id="@+id/editTextTextPassword"

@@ -22,24 +22,29 @@
 
     <TextView
         android:id="@+id/numOfLikes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_width="18dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/leaguespartan"
         android:text="@string/numOfLikes"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/likesImageView"
-        app:layout_constraintHorizontal_bias="0.722"
+        app:layout_constraintHorizontal_bias="0.615"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventDate"
-        app:layout_constraintVertical_bias="0.555" />
+        app:layout_constraintVertical_bias="0.6" />
 
     <TextView
         android:id="@+id/eventName"
-        android:layout_width="259dp"
-        android:layout_height="30dp"
+
+        android:layout_width="270dp"
+        android:layout_height="36dp"
+
         android:layout_marginStart="16dp"
         android:layout_marginEnd="164dp"
         android:layout_marginBottom="40dp"
+        android:fontFamily="@font/leaguespartan"
         android:text="@string/eventName"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +59,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="72dp"
         android:text="@string/eventDate"
-        android:textSize="14sp"
+        android:fontFamily="@font/leaguespartan"
+        android:textSize="20sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/eventImage"
         app:layout_constraintHorizontal_bias="0.0"

@@ -194,12 +194,12 @@ class CommentsFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance(userName: String, postID: String): FoodEventFragment {
+        fun newInstance(userName: String, postID: String): CommentsFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_USERNAME, userName)
                 putSerializable(ARG_POSTID, postID)
             }
-            return FoodEventFragment().apply {
+            return CommentsFragment().apply {
                 arguments = args
             }
         }

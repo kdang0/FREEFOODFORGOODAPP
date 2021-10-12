@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.freefoodapp.firebase.DatabaseVars
@@ -93,9 +90,15 @@ class FoodEventFragment: Fragment() {
         }
         likeEvent.setOnClickListener {
             post.id?.let { it1 -> addLikeToPost(it1) }
+            likeEvent.isEnabled = false
+            dislikeEvent.isEnabled = false
+            Toast.makeText(activity, "Like Added!", Toast.LENGTH_SHORT).show()
         }
         dislikeEvent.setOnClickListener {
             post.id?.let { it1 -> removeLikeToPost(it1) }
+            dislikeEvent.isEnabled = false
+            likeEvent.isEnabled = false
+            Toast.makeText(activity, "Dislike Added!", Toast.LENGTH_SHORT).show()
         }
         Log.d(TAG, post.image.toString())
         Glide.with(eventImage)

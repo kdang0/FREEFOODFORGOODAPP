@@ -52,7 +52,7 @@ class FoodEventFragment: Fragment() {
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         username = arguments?.getSerializable(ARG_USERNAME) as String
         email = arguments?.getSerializable(ARG_EMAIL) as String
-        post = arguments?.getSerializable(ARG_POST) as Post
+        post = arguments?.getParcelable<Post>(ARG_POST) as Post
     }
 
     override fun onAttach(context: Context) {
@@ -160,7 +160,7 @@ class FoodEventFragment: Fragment() {
             val args = Bundle().apply {
                 putSerializable(ARG_EMAIL, accountName)
                 putSerializable(ARG_USERNAME, userName)
-                putSerializable(ARG_POST, userName)
+                putParcelable(ARG_POST, post)
             }
             return FoodEventFragment().apply {
                 arguments = args

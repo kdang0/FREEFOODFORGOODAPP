@@ -204,17 +204,17 @@ class FoodEventCreateFragment: Fragment() {
     }
 
     fun createPost(description: String, name: String, image: String, location: String, user: String) {
-        val post = Post.createPost()
-        post.date = Date()
-        post.description = description
-        post.name = name
-        post.image = image
-        post.likes = 0
-        post.location = location
-        post.user = user
-
+        var date = Date()
+        var description = description
+        var name = name
+        var image = image
+        var likes:Long = 0
+        var location = location
+        var user = user
         val newPost = DB.child(DatabaseVars.FIREBASE_POSTS).push()
-        post.id = newPost.key
+        var id = newPost.key
+
+        val post = Post(id,date,description,image,likes,location,name,user)
         newPost.setValue(post)
         Log.d(TAG, "Post uploaded to cloud")
     }

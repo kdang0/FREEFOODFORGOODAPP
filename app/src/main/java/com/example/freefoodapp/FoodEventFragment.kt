@@ -83,7 +83,10 @@ class FoodEventFragment: Fragment() {
         timeTextView.setText(post.date.toString())
         location.setText(post.location)
         eventName.setText(post.name)
+        Log.d(TAG, "Email is: $email")
         commentEvent.setOnClickListener {
+            Log.d(TAG, "email is: $email")
+            Log.d(TAG, "Comment Clicked")
             post.id?.let { it1 -> mainCallbacks?.onGoToComments(username, it1) }
         }
         likeEvent.setOnClickListener {
@@ -158,6 +161,7 @@ class FoodEventFragment: Fragment() {
     companion object {
         fun newInstance(accountName: String, userName: String, post: Post): FoodEventFragment {
             val args = Bundle().apply {
+                Log.d(TAG, "Email is: $accountName")
                 putSerializable(ARG_EMAIL, accountName)
                 putSerializable(ARG_USERNAME, userName)
                 putParcelable(ARG_POST, post)

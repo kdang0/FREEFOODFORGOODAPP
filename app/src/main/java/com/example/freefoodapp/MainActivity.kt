@@ -394,7 +394,9 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
     }
 
     override fun onGoToComments(userName: String, postID: String) {
+        Log.d(TAG, "Go to comments called.")
         val fragment = CommentsFragment.newInstance(userName, postID)
+        Log.d(TAG, "New comments created.")
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 

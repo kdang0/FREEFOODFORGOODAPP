@@ -194,6 +194,15 @@ class FoodListFragment: Fragment() {
         inflater.inflate(R.menu.food_event_list, menu)
     }
 
+    override fun onOptionsItemSelected(item:MenuItem) : Boolean {
+        return when (item.itemId){
+            R.id.newFoodEvent -> {
+                callbacks?.onCreateEvent(email,username)
+                return true
+           }
+            else ->return super.onOptionsItemSelected(item)
+       }
+    }
 
     companion object {
         fun newInstance(accountName: String, userName: String): FoodListFragment {

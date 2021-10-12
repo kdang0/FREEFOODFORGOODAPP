@@ -17,12 +17,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.freefoodapp.firebase.DatabaseVars
 import com.example.freefoodapp.firebase.Post
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.UploadTask
 import java.io.File
 import java.util.*
 
@@ -107,12 +111,16 @@ class FoodEventCreateFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE.jpg")
+        photoUri =  FileProvider.getUriForFile(requireActivity(),
+        "com.example.freefoodapp", photoFile)
     }
 
     override fun onDetach() {
         super.onDetach()
     }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -237,9 +245,8 @@ class FoodEventCreateFragment: Fragment() {
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
+                    uploadImageToFirebase(photoUri)
                     startActivityForResult(captureImage, REQUEST_PHOTO)
-
-
             }
         }
     }
@@ -260,13 +267,42 @@ class FoodEventCreateFragment: Fragment() {
         Log.d(TAG, "Post uploaded to cloud")
     }
 
+    private fun uploadImageToFirebase(pathToUploadFile: Uri){
+        if(pathToUploadFile != null){
+            Log.d(TAG, "hi")
+            val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
+            val uploadImgTask = reference?.putFile(pathToUploadFile!!)
+            val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation reference.downloadUrl
+            })?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val uri = task.result
+                    //Do something with the uri
+                    uploadableFilePath = uri.toString()
+                    //TODO: Trigger something here to actually post. Possible call the createPost() here?
+                } else {
+                    Log.d(TAG, "An error occured uploading a file")
+                }
+            }?.addOnFailureListener{
+                //Put something here for another failure?
+            }
+        }else{
+            Log.d(TAG, "You need to upload an image")
+        }
+    }
+
     companion object {
-        fun newInstance(accountName: String, userName: String): FoodListFragment {
+        fun newInstance(accountName: String, userName: String): FoodEventCreateFragment {
             val args = Bundle().apply {
                 putSerializable(ARG_EMAIL, accountName)
                 putSerializable(ARG_USERNAME, userName)
             }
-            return FoodListFragment().apply {
+            return FoodEventCreateFragment().apply {
                 arguments = args
             }
         }

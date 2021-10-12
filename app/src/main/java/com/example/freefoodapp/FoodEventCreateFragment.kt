@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import java.io.File
 import java.util.*
@@ -61,6 +63,7 @@ class FoodEventCreateFragment: Fragment() {
     private var email: String = ""
     private var username: String = ""
     private var uploadableFilePath: String? = null
+    private var storageRef: StorageReference? = null
 
     interface MainCallbacks {
         fun onPost(email: String, userName: String)
@@ -73,6 +76,7 @@ class FoodEventCreateFragment: Fragment() {
         DBPosts = DB.child(DatabaseVars.FIREBASE_POSTS)
         username = arguments?.getSerializable(ARG_USERNAME) as String
         email = arguments?.getSerializable(ARG_EMAIL) as String
+        storageRef = FirebaseStorage.getInstance().reference
     }
 
     override fun onAttach(context: Context) {
@@ -270,16 +274,18 @@ class FoodEventCreateFragment: Fragment() {
     }
 
     private fun uploadImageToFirebase(pathToUploadFile: Uri){
-        if(pathToUploadFile != null){
+        if(photoUri != null){
             Log.d(TAG, "acceptable URI:" + photoUri.toString())
             val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
-            val uploadImgTask = reference?.putFile(pathToUploadFile!!)
+            val uploadImgTask = reference?.putFile(photoUri!!)
             val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                Log.d(TAG, "Made it inside task")
                 if (!task.isSuccessful) {
                     task.exception?.let {
                         throw it
                     }
                 }
+                Log.d(TAG, "Task didn't fail")
                 return@Continuation reference.downloadUrl
             })?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {

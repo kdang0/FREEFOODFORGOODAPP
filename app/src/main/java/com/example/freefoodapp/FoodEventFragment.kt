@@ -43,7 +43,7 @@ class FoodEventFragment: Fragment() {
     lateinit var DBLikeRef: DatabaseReference
 
     interface MainCallbacks {
-        fun onGoToComments(userName: String, postID: String)
+        fun onGoToComments(userName: String, postID: String, postName: String)
     }
     private var mainCallbacks: MainCallbacks? = null
 
@@ -89,7 +89,11 @@ class FoodEventFragment: Fragment() {
             Log.d(TAG, "email is: $email")
             Log.d(TAG, "Username is: $username")
             Log.d(TAG, "Comment Clicked")
-            post.id?.let { it1 -> mainCallbacks?.onGoToComments(username, it1) }
+            var id: String? = post.id
+            var name: String? = post.name
+            if (id != null && name != null) {
+                mainCallbacks?.onGoToComments(username, id, name)
+            }
         }
         likeEvent.setOnClickListener {
             post.id?.let { it1 -> addLikeToPost(it1) }

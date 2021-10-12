@@ -18,6 +18,7 @@ import com.example.freefoodapp.firebase.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.io.File
 import java.util.*
 
 private const val TAG = "FoodEventCreateFragment"
@@ -25,6 +26,7 @@ private const val ARG_EMAIL = "User_Email"
 private const val ARG_USERNAME = "User_Username"
 
 class FoodEventCreateFragment: Fragment() {
+    private lateinit var photoFile : File
     private lateinit var nameTextView: TextView
     private lateinit var locationTextView: TextView
     private lateinit var dateTimeTextView: TextView
@@ -98,6 +100,7 @@ class FoodEventCreateFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
     }
 
     override fun onDetach() {

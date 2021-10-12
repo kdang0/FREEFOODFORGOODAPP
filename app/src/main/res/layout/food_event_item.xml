@@ -8,6 +8,17 @@
     android:layout_marginTop="5dp">
 
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="413dp"
+        android:layout_height="136dp"
+        android:background="@drawable/border"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/likesImageView"
         android:layout_width="46dp"

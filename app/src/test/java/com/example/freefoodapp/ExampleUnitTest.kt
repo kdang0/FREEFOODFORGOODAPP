@@ -48,4 +48,17 @@ class ExampleUnitTest {
         assertEquals(frag.verifyPassword(password, password), true)
         assertEquals(frag.verifyPassword(password, wrongPassword), false)
     }
+
+    @Test
+    fun testIsOfPost() {
+        var frag = CommentsFragment()
+        var testComment = Comment()
+        var correctPost = "Test"
+        var incorrectPost = "NotTest"
+
+        testComment.postID = correctPost
+        assertEquals(true, frag.isOfPost(testComment, correctPost))
+        assertEquals(false, frag.isOfPost(testComment, incorrectPost))
+    }
+
 }

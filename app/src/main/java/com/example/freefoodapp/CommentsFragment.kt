@@ -145,7 +145,7 @@ class CommentsFragment: Fragment() {
         comment.postID = map.get("postID") as String?
         comment.content = map.get("content") as String?
         comment.user = map.get("user") as String?
-        if (isOfPost(comment)) {
+        if (isOfPost(comment, originPost)) {
             comments.add(comment)
             //toDoItemList!!.add(todoItem);
             //Put the new post somewhere
@@ -169,7 +169,7 @@ class CommentsFragment: Fragment() {
         Log.d(TAG, "Comment uploaded to cloud")
     }
 
-    fun isOfPost(comment: Comment): Boolean {
+    fun isOfPost(comment: Comment, originPost: String): Boolean {
         return (comment.postID == originPost)
     }
 

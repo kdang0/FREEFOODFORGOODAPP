@@ -35,43 +35,46 @@ import java.io.File
 import java.util.*
 
 private const val TAG = "FoodEventCreateFragment"
-private const val ARG_EMAIL = "User_Email"
-private const val ARG_USERNAME = "User_Username"
+private const val ARG_EMAIL = "User_Email" //Email passed in as argument
+private const val ARG_USERNAME = "User_Username" //Username of user passed in as argument
 private const val REQUEST_PHOTO = 2
 
 class FoodEventCreateFragment: Fragment() {
-    private lateinit var photoFile : File
-    private lateinit var photoUri : Uri
-    private lateinit var nameTextView: TextView
-    private lateinit var locationTextView: TextView
-    private lateinit var dateTimeTextView: TextView
-    private lateinit var descriptionTextView: TextView
-    private lateinit var imageTextView: TextView
-    private lateinit var eventImage: ImageView
-    private lateinit var editTextDate: EditText
-    private lateinit var editTextTime: EditText
-    private lateinit var location: EditText
-    private lateinit var description: EditText
-    private lateinit var eventName: EditText
-    private lateinit var postEvent: Button
-    private lateinit var uploadImage: Button
-    lateinit var DB: DatabaseReference //Registering
-    lateinit var DBPosts: DatabaseReference
-    private var name: String = ""
-    private var date: String = ""
-    private var time: String = ""
-    private var loc: String = ""
-    private var descrip: String = ""
-    private var email: String = ""
-    private var username: String = ""
-    private var uploadableFilePath: String? = null
-    private var storageRef: StorageReference? = null
+    private lateinit var photoFile : File //Reference to the photo object
+    private lateinit var photoUri : Uri //Reference to the path of the photo
+    private lateinit var nameTextView: TextView //textview for title
+    private lateinit var locationTextView: TextView //textview of the location
+    private lateinit var dateTimeTextView: TextView //textview of the dateTime
+    private lateinit var descriptionTextView: TextView //textview of the description
+    private lateinit var imageTextView: TextView //textview of the image
+    private lateinit var eventImage: ImageView //ImageView that will hold image
+    private lateinit var editTextDate: EditText //TextEdit that will contain date
+    private lateinit var editTextTime: EditText //EditText that will hold time
+    private lateinit var location: EditText //EditText that will contain the user input location
+    private lateinit var description: EditText //EditTest that will contain the user description
+    private lateinit var eventName: EditText //EditText that will contain the user's Post title
+    private lateinit var postEvent: Button //Button that will allow for posting
+    private lateinit var uploadImage: Button //Button that will allow for uploading an image before posting
+    lateinit var DB: DatabaseReference //Reference to Firebase
+    lateinit var DBPosts: DatabaseReference //Reference to Firebase's child list of Posts
+    private var name: String = "" //holds post title
+    private var date: String = "" //holds post date
+    private var time: String = "" //holds post time
+    private var loc: String = "" //holds post location
+    private var descrip: String = "" //holds post description
+    private var email: String = "" //holds post email
+    private var username: String = "" //holds post username
+    private var uploadableFilePath: String? = null //holds the remote url to post
+    private var storageRef: StorageReference? = null //holds the Firebase Storage reference
 
     interface MainCallbacks {
         fun onPost(email: String, userName: String)
     }
     private var mainCallbacks: MainCallbacks? = null
 
+    /**
+     * We initalize all the references to Database, pull arguments out
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
@@ -91,6 +94,9 @@ class FoodEventCreateFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /**
+         * Here we initalize the references to UI elements
+         */
         val view = inflater.inflate(R.layout.create_foodpost, container, false)
         nameTextView = view.findViewById(R.id.nameTextView) as TextView
         descriptionTextView = view.findViewById(R.id.descriptionTextView) as TextView
@@ -106,24 +112,19 @@ class FoodEventCreateFragment: Fragment() {
         postEvent = view.findViewById(R.id.postEvent) as Button
         uploadImage = view.findViewById(R.id.uploadPost) as Button
         postEvent.setOnClickListener {
+            //For post event button, sents all data to the post function
             createPost(descrip, name, uploadableFilePath!!, loc, email)
             mainCallbacks?.onPost(email, username)
         }
         postEvent.isEnabled = false
-//        uploadImage.setOnClickListener {
-//            //image stuff
-//        }
         return view
     }
 
-    /**
-     * Tells where to write File and URI in filesystem serviced by FileProvider
-     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE0.jpg")
+        photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE0.jpg") //initalize reference to locale photo file
         photoUri =  FileProvider.getUriForFile(requireActivity(),
-            "com.example.freefoodapp", photoFile)
+            "com.example.freefoodapp", photoFile) //implicit intent to take photo for event
 
     }
 
@@ -131,8 +132,9 @@ class FoodEventCreateFragment: Fragment() {
         super.onDetach()
     }
 
-
-
+    /**
+     * Watch for all changes to the EditText fields, record it
+     */
     override fun onStart() {
         super.onStart()
         val nameTextWatcher = object : TextWatcher {
@@ -232,8 +234,8 @@ class FoodEventCreateFragment: Fragment() {
         editTextTime.addTextChangedListener(timeTextWatcher)
 
         /**
-         * Creates a onClickListener that will capture image URI through camera intent when
-         * user clicks on the upload button
+         * Send user over to implicit intent for photo taking,
+         * granting all permissions in the process for the camera app and the return
          */
         uploadImage.apply {
             val packageManager : PackageManager =
@@ -242,10 +244,6 @@ class FoodEventCreateFragment: Fragment() {
             val resolvedActivity : ResolveInfo? =
                 packageManager.resolveActivity(captureImage,
                 PackageManager.MATCH_DEFAULT_ONLY)
-//            if (resolvedActivity == null){
-//                isEnabled = false
-//            }
-            //Removed so emulator camera is enabled.
 
             setOnClickListener {
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
@@ -261,19 +259,13 @@ class FoodEventCreateFragment: Fragment() {
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                 }
-                //uploadImageToFirebase(photoUri)
                     startActivityForResult(captureImage, REQUEST_PHOTO)
             }
         }
     }
 
     /**
-     * Will create a post given
-     * @param description of the food event
-     * @param name of the food event
-     * @param image associated with the food event
-     * @param location of the food event
-     * @param user creator the food event
+     * Function to create post based off of all data passed in by user
      */
     fun createPost(description: String, name: String, image: String, location: String, user: String) {
         var date = Date()
@@ -283,22 +275,21 @@ class FoodEventCreateFragment: Fragment() {
         var likes:Long = 0
         var location = location
         var user = user
-        val newPost = DB.child(DatabaseVars.FIREBASE_POSTS).push()
-        var id = newPost.key
+        val newPost = DB.child(DatabaseVars.FIREBASE_POSTS).push() //Add new post to DB without content to get key
+        var id = newPost.key //get the UUID
 
-        val post = Post(id,date,description,image,likes,location,name,user)
-        newPost.setValue(post)
+        val post = Post(id,date,description,image,likes,location,name,user) //Create post object
+        newPost.setValue(post) //Actually populate database object
         Log.d(TAG, "Post uploaded to cloud")
     }
 
     /**
-     * Uploads the URI to firebase database and creates a link that is associated with the image
-     * @param pathToUploadFile Is the current URI that is being written after image capture through camera intent
+     * Function to upload photo to Firebase storage, get URL to photo to add to post object
      */
     private fun uploadImageToFirebase(pathToUploadFile: Uri){
         if(photoUri != null){
             Log.d(TAG, "acceptable URI:" + photoUri.toString())
-            val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString())
+            val reference = storageRef?.child("postImgUploads/" + UUID.randomUUID().toString()) //Create reference to remote file
             val uploadImgTask = reference?.putFile(photoUri!!)
             val uploadUrlTask = uploadImgTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 Log.d(TAG, "Made it inside task")
@@ -311,45 +302,42 @@ class FoodEventCreateFragment: Fragment() {
                 return@Continuation reference.downloadUrl
             })?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val uri = task.result
+                    val uri = task.result //Get the URL
                     //Do something with the uri
-                    uploadableFilePath = uri.toString()
+                    uploadableFilePath = uri.toString() //Set the URL
                     Log.d(TAG,"got it")
-                    postEvent.isEnabled = true
+                    postEvent.isEnabled = true //Enable post event now that the photo has uploaded sucessfully
                 } else {
-                    Log.d(TAG, "An error occurred uploading a file")
+                    Log.d(TAG, "An error occured uploading a file")
                 }
             }?.addOnFailureListener{
-                Log.d(TAG, "Debug?")
+                Log.d(TAG, "Why it no work")
             }
+            Log.d(TAG,"Nothing happened...")
         }else{
             Log.d(TAG, "You need to upload an image")
         }
     }
 
     /**
-     * Gives confirmation on whether the image capture was successful through
-     * @param requestCode REQUEST_PHOTO and if
-     * successful, will upload the updated URI to firebase database and upload
-     * image associated with URI to FoodEvent Item recyclerview
+     * Handle the result from the photo app
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == REQUEST_PHOTO){
-//            Log.d(TAG, photoUri.toString())
             updatePhotoView()
             uploadImageToFirebase(photoUri)
         }
     }
 
     /**
-     * Updates Imageview with an image that is scaled and has the correct orientation
+     * Put the new photo into the photo view so the user can see what it will look like in the post
      */
     private fun updatePhotoView() {
         if(photoFile.exists()) {
-            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
-            val rotbitmap = orientBitmap(photoFile.path, bitmap)
-            eventImage.setImageBitmap(rotbitmap)
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity()) //Scale the bitmap down
+            val rotbitmap = orientBitmap(photoFile.path, bitmap) //Rotate the bitmap correctly
+            eventImage.setImageBitmap(rotbitmap) //Set the ImageView
 
         } else {
             eventImage.setImageDrawable(null)

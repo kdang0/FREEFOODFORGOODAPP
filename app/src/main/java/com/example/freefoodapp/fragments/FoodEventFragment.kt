@@ -15,35 +15,38 @@ import com.example.freefoodapp.firebase.Post
 import com.google.firebase.database.*
 
 private const val TAG = "FoodEventFragment"
-private const val ARG_EMAIL = "User_Email"
-private const val ARG_USERNAME = "User_Username"
-private const val ARG_POST = "Post"
+private const val ARG_EMAIL = "User_Email" //Email argment passed
+private const val ARG_USERNAME = "User_Username" //Username argment passsed
+private const val ARG_POST = "Post" //Post argument passed
 
 class FoodEventFragment: Fragment() {
-    private lateinit var viewdesc: TextView
-    private lateinit var description: TextView
-    private lateinit var location: TextView
-    private lateinit var eventLocation: TextView
-    private lateinit var eventName: TextView
-    private lateinit var eventDateTime: TextView
-    private lateinit var dateTextView: TextView
-    private lateinit var timeTextView: TextView
-    private lateinit var eventImage: ImageView
-    private lateinit var likeEvent: ImageButton
-    private lateinit var dislikeEvent: ImageButton
-    private lateinit var commentEvent: Button
-    lateinit var DB: DatabaseReference //Registering
-    lateinit var DBPosts: DatabaseReference
-    private var email: String = ""
-    private var username: String = ""
-    private lateinit var post: Post
-    lateinit var DBLikeRef: DatabaseReference
+    private lateinit var viewdesc: TextView  //Description title
+    private lateinit var description: TextView //Actual description
+    private lateinit var location: TextView //location title
+    private lateinit var eventLocation: TextView //Actual location
+    private lateinit var eventName: TextView //Event title
+    private lateinit var eventDateTime: TextView //Event date actual
+    private lateinit var dateTextView: TextView //Date title
+    private lateinit var timeTextView: TextView //Time actual
+    private lateinit var eventImage: ImageView //Image view of event's image
+    private lateinit var likeEvent: ImageButton // Image button to add like
+    private lateinit var dislikeEvent: ImageButton //Image button to add dislike
+    private lateinit var commentEvent: Button //Button to allow user to get to comment fragment
+    lateinit var DB: DatabaseReference //Firebase database reference
+    lateinit var DBPosts: DatabaseReference //Firebase posts reference
+    private var email: String = "" //email of user
+    private var username: String = "" //username of user
+    private lateinit var post: Post //Post object retrieved
+    lateinit var DBLikeRef: DatabaseReference //Reference to the life reference
 
     interface MainCallbacks {
         fun onGoToComments(userName: String, postID: String, postName: String)
     }
     private var mainCallbacks: MainCallbacks? = null
 
+    /**
+     * initalize data and references
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
@@ -63,6 +66,9 @@ class FoodEventFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        /**
+         * Initalize reference to all the UI elements
+         */
         val view = inflater.inflate(R.layout.view_foodevent, container, false)
         viewdesc = view.findViewById(R.id.viewdesc) as TextView
         description = view.findViewById(R.id.description) as TextView
@@ -83,6 +89,9 @@ class FoodEventFragment: Fragment() {
         eventName.setText(post.name)
         Log.d(TAG, "Email is: $email")
         commentEvent.setOnClickListener {
+            /**
+             * Send user to comments with the appropriate data (postID, username, name)
+             */
             Log.d(TAG, "email is: $email")
             Log.d(TAG, "Username is: $username")
             Log.d(TAG, "Comment Clicked")
@@ -93,12 +102,20 @@ class FoodEventFragment: Fragment() {
             }
         }
         likeEvent.setOnClickListener {
+            /**
+             * When clicking like, disable other buttons from being pressed again (no double likeing/disliking)
+             * Send Toast to user telling them they liked it
+             */
             post.id?.let { it1 -> addLikeToPost(it1) }
             likeEvent.isEnabled = false
             dislikeEvent.isEnabled = false
             Toast.makeText(activity, "Like Added!", Toast.LENGTH_SHORT).show()
         }
         dislikeEvent.setOnClickListener {
+            /**
+             * When clicking dislike, disable other buttons from being pressed again (no double likeing/disliking)
+             * Send Toast to user telling them they disliked it
+             */
             post.id?.let { it1 -> removeLikeToPost(it1) }
             dislikeEvent.isEnabled = false
             likeEvent.isEnabled = false
@@ -107,31 +124,37 @@ class FoodEventFragment: Fragment() {
         Log.d(TAG, post.image.toString())
         Glide.with(eventImage)
             .load(post.image)
-            .into(eventImage)
+            .into(eventImage) //This loads the image view with the image referenced in the URL
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Glide.with(eventImage)
-//            .load(post.image)
-//            .into(eventImage)
     }
 
     override fun onDetach() {
         super.onDetach()
     }
 
+    /**
+     * When the user likes, this should add a listener
+     */
     private fun addLikeToPost(givenPostID: String) {
         DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
         DBLikeRef.addListenerForSingleValueEvent(likeListener)
     }
 
+    /**
+     * When the userlikes, this should add a listener
+     */
     private fun removeLikeToPost(givenPostID: String) {
         DBLikeRef = DB.child(DatabaseVars.FIREBASE_POSTS).child(givenPostID)
         DBLikeRef.addListenerForSingleValueEvent(likeRemoveListener)
     }
 
+    /**
+     * Function to handle changes to likes
+     */
     var likeListener: ValueEventListener = object: ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             var currentLikes: Int? = null
@@ -139,20 +162,23 @@ class FoodEventFragment: Fragment() {
             for (snap in dataSnapshot.children) {
                 Log.d(TAG, "LIKES SNAP: $snap")
                 if(snap.key.equals("likes")) {
-                    currentLikes = (snap.value as Long).toInt()
+                    currentLikes = (snap.value as Long).toInt() //Get the current likes in the DB
                 }
             }
             Log.d(TAG, "Found Likes: $currentLikes")
             //Now update it
             if(currentLikes != null) {
-                var newLikes = currentLikes!! + 1
-                DBLikeRef.child("likes").setValue(newLikes)
+                var newLikes = currentLikes!! + 1 //Add one to the current likes in the DB
+                DBLikeRef.child("likes").setValue(newLikes) //Update this value in the DB
             }
         }
 
         override fun onCancelled(databaseError: DatabaseError) {}
     }
 
+    /**
+     * Function to handle what happens when a like is removed
+     */
     var likeRemoveListener: ValueEventListener = object: ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             var currentLikes: Int? = null
@@ -160,14 +186,14 @@ class FoodEventFragment: Fragment() {
             for (snap in dataSnapshot.children) {
                 Log.d(TAG, "LIKES SNAP REMOVE: $snap")
                 if(snap.key.equals("likes")) {
-                    currentLikes = (snap.value as Long).toInt()
+                    currentLikes = (snap.value as Long).toInt() //Get current likes
                 }
             }
             Log.d(TAG, "Found Likes: $currentLikes")
             //Now update it
             if(currentLikes != null) {
-                var newLikes = currentLikes!! - 1
-                DBLikeRef.child("likes").setValue(newLikes)
+                var newLikes = currentLikes!! - 1 //Remove one from the current likes
+                DBLikeRef.child("likes").setValue(newLikes) //Update the DB
             }
         }
 

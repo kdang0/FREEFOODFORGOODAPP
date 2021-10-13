@@ -9,7 +9,7 @@ import android.graphics.Point
 import android.media.ExifInterface
 
 /**
- * Orients and scales image
+ * Orients scaled bitmap
  */
 fun orientBitmap(path:String, bmp : Bitmap) : Bitmap{
     var gfgExifB : ExifInterface = ExifInterface(path)
@@ -26,9 +26,11 @@ fun orientBitmap(path:String, bmp : Bitmap) : Bitmap{
     mat.postRotate(angle.toFloat())
     var newbmp = createBitmap(bmp,0,0, bmp.width, bmp.height, mat, true)
     return newbmp
-    //hello world s
 }
 
+/**
+ * Converts image file to a scaled bitmap
+ */
 fun getScaledBitmap(path:String, activity: Activity): Bitmap {
     val size = Point()
     activity.windowManager.defaultDisplay.getSize(size)

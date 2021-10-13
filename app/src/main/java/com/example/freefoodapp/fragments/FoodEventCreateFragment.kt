@@ -116,6 +116,9 @@ class FoodEventCreateFragment: Fragment() {
         return view
     }
 
+    /**
+     * Tells where to write File and URI in filesystem serviced by FileProvider
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         photoFile = File(context?.applicationContext?.filesDir, "IMG_EVENTPICTURE0.jpg")
@@ -227,6 +230,11 @@ class FoodEventCreateFragment: Fragment() {
             }
         }
         editTextTime.addTextChangedListener(timeTextWatcher)
+
+        /**
+         * Creates a onClickListener that will capture image URI through camera intent when
+         * user clicks on the upload button
+         */
         uploadImage.apply {
             val packageManager : PackageManager =
                 requireActivity().packageManager
@@ -259,6 +267,14 @@ class FoodEventCreateFragment: Fragment() {
         }
     }
 
+    /**
+     * Will create a post given
+     * @param description of the food event
+     * @param name of the food event
+     * @param image associated with the food event
+     * @param location of the food event
+     * @param user creator the food event
+     */
     fun createPost(description: String, name: String, image: String, location: String, user: String) {
         var date = Date()
         var description = description
@@ -275,6 +291,10 @@ class FoodEventCreateFragment: Fragment() {
         Log.d(TAG, "Post uploaded to cloud")
     }
 
+    /**
+     * Uploads the URI to firebase database and creates a link that is associated with the image
+     * @param pathToUploadFile Is the current URI that is being written after image capture through camera intent
+     */
     private fun uploadImageToFirebase(pathToUploadFile: Uri){
         if(photoUri != null){
             Log.d(TAG, "acceptable URI:" + photoUri.toString())
@@ -297,18 +317,22 @@ class FoodEventCreateFragment: Fragment() {
                     Log.d(TAG,"got it")
                     postEvent.isEnabled = true
                 } else {
-                    Log.d(TAG, "An error occured uploading a file")
+                    Log.d(TAG, "An error occurred uploading a file")
                 }
             }?.addOnFailureListener{
-                //Put something here for another failure?
-                Log.d(TAG, "Why it no work")
+                Log.d(TAG, "Debug?")
             }
-            Log.d(TAG,"Nothing happened...")
         }else{
             Log.d(TAG, "You need to upload an image")
         }
     }
 
+    /**
+     * Gives confirmation on whether the image capture was successful through
+     * @param requestCode REQUEST_PHOTO and if
+     * successful, will upload the updated URI to firebase database and upload
+     * image associated with URI to FoodEvent Item recyclerview
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == REQUEST_PHOTO){
@@ -318,6 +342,9 @@ class FoodEventCreateFragment: Fragment() {
         }
     }
 
+    /**
+     * Updates Imageview with an image that is scaled and has the correct orientation
+     */
     private fun updatePhotoView() {
         if(photoFile.exists()) {
             val bitmap = getScaledBitmap(photoFile.path, requireActivity())

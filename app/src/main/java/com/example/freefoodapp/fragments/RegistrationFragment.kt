@@ -38,11 +38,17 @@ class RegistrationFragment: Fragment() {
     private var password: String = ""
     private var confirmedPassword: String = ""
 
+    /**
+     * Interface to call functions in MainActivity
+     */
     interface MainCallbacks {
         fun onRegister()
     }
     private var mainCallbacks: MainCallbacks? = null
 
+    /**
+     *When class is created, initializes database stuff
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DB = FirebaseDatabase.getInstance().reference //registering
@@ -50,11 +56,17 @@ class RegistrationFragment: Fragment() {
         DBUsers = DB.child(DatabaseVars.FIREBASE_USERS) //registering
     }
 
+    /**
+     * Enables the use of callback functions
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainCallbacks = context as MainCallbacks?
     }
 
+    /**
+     * Initializes all the views, sets up the onClickListener for the signup/register button
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,6 +82,9 @@ class RegistrationFragment: Fragment() {
         usernameEditText = view.findViewById(R.id.username) as EditText
         passwordEditText = view.findViewById(R.id.password) as EditText
         confirmPasswordEditText = view.findViewById(R.id.confirmPassword) as EditText
+        /**
+         * When sign in/register button is pressed, register new user of their password and confirmation of password are the same
+         */
         signupButton.setOnClickListener {
             var samePassword: Boolean = verifyPassword(password, confirmedPassword)
             if (samePassword) {
@@ -87,6 +102,9 @@ class RegistrationFragment: Fragment() {
         super.onDetach()
     }
 
+    /**
+     * Creates TextWatchers to observe EditText UI Components and update corresponding variables upon receiving input
+     */
     override fun onStart() {
         super.onStart()
         val emailTextWatcher = object : TextWatcher {
@@ -167,26 +185,26 @@ class RegistrationFragment: Fragment() {
         confirmPasswordEditText.addTextChangedListener(confirmTextWatcher)
     }
 
+    /**
+     * Checks that the password and the confirmation of the password are the same
+     */
     fun verifyPassword(password: String, confirmedPassword: String): Boolean {
         var samePassword: Boolean = (password == confirmedPassword)
         return samePassword
     }
 
-    private fun createAccount(): Boolean {
-        var isCreated: Boolean = true
-        //Check that there's no duplicate password
-        //check that there's no duplicate username
-        //check that password and confirm password are the same
-        //create account
-        return isCreated
-    }
-
+    /**
+     * Creates a new user account in the Firebase Database with the inputted username, email address, and password
+     */
     private fun createNewAccount() {
         Log.d(TAG, "Creating new account...")
         var username = this.username
         var email = this.emailAddress
         var password = this.password
 
+        /**
+         * checks that none of the input fields are empty
+         */
         if(!username!!.isEmpty() && !email!!.isEmpty() && !password!!.isEmpty()) {
             DBAuth!!
                 .createUserWithEmailAndPassword(email!!, password!!)
@@ -196,6 +214,9 @@ class RegistrationFragment: Fragment() {
                         val userId = DBAuth!!.currentUser!!.uid
                         val currentUserDb = DBUsers!!.child(userId)
                         currentUserDb.child("username").setValue(username)
+                        /**
+                         * Goes to Confirmation Fragment
+                         */
                         mainCallbacks?.onRegister()
                     } else {
                         Log.w(TAG, "Creating user failed: ", task.exception)
@@ -209,6 +230,9 @@ class RegistrationFragment: Fragment() {
         Log.d(TAG, "Creating done for new account...")
     }
 
+    /**
+     * Creates a registration fragment
+     */
     companion object {
         fun newInstance(): RegistrationFragment {
             return RegistrationFragment()

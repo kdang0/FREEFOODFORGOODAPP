@@ -57,7 +57,7 @@ class CommentsFragment: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.comment_list, container, false)
         /**
-         * Reference all the view's UI elemetns
+         * Reference all the view's UI elements
          */
         commentsRecyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
         eventName = view.findViewById(R.id.eventName) as TextView
@@ -223,7 +223,7 @@ class CommentsFragment: Fragment() {
     }
 
     /**
-     * This is the adaper that handles the comments
+     * This is the adapter that handles the comments
      */
     private inner class CommentsAdapter(var comments: List<Comment>) :
         RecyclerView.Adapter<CommentHolder>() {

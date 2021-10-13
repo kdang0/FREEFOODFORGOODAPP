@@ -58,12 +58,14 @@ class MainActivity : AppCompatActivity(), LoginFragment.MainCallbacks, Registrat
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
 
+
     override fun onGoToComments(userName: String, postID: String, postName: String) {
         Log.d(TAG, "Go to comments called.")
         val fragment = CommentsFragment.newInstance(userName, postID, postName)
         Log.d(TAG, "New comments created.")
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
     }
+
 
     override fun onCreateEvent(email: String, userName: String) {
         val fragment = FoodEventCreateFragment.newInstance(email, userName)

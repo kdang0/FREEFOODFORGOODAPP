@@ -223,7 +223,7 @@ class CommentsFragment: Fragment() {
     }
 
     /**
-     * This is the adaper that handles the comments
+     * This is the adapter that handles the comments
      */
     private inner class CommentsAdapter(var comments: List<Comment>) :
         RecyclerView.Adapter<CommentHolder>() {

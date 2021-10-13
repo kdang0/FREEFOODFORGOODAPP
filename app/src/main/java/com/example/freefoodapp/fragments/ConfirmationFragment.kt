@@ -11,18 +11,24 @@ import androidx.fragment.app.Fragment
 import com.example.freefoodapp.R
 
 class ConfirmationFragment : Fragment() {
-    private lateinit var successTextView: TextView
-    private lateinit var returnButton: Button
+    private lateinit var successTextView: TextView //Text view to show users text
+    private lateinit var returnButton: Button //This is the return button for users
 
     interface MainCallbacks {
         fun onReturnToLogin()
     }
-    private var mainCallbacks: MainCallbacks? = null
+    private var mainCallbacks: MainCallbacks? = null //Get callbacks
 
+    /**
+     * This is for the saved instance state super call
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+    /**
+     * When it attaches get the callbacks
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainCallbacks = context as MainCallbacks?
@@ -36,6 +42,9 @@ class ConfirmationFragment : Fragment() {
         val view = inflater.inflate(R.layout.registration_confirmation, container, false)
         successTextView = view.findViewById(R.id.successTextView) as TextView
         returnButton = view.findViewById(R.id.returnLogin) as Button
+        /**
+         * When you click the button, send them back to the login page
+         */
         returnButton.setOnClickListener {
             mainCallbacks?.onReturnToLogin()
         }

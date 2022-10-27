@@ -18,12 +18,25 @@ Another competitor is the app called “Campus Food” (https://play.google.com/
 
 When a user opens the app, they are seen in the login page where they must log into their account through their username and password. If they don’t have an account already, they have an option to create one, and pressing “Register” will send them to another layout, which allows them to set one up by entering their email, desired username, and password. To confirm creation, the user will have to press “Sign Up”; a layout will pop up and tell the user they have successfully created the account. Once the user is logged into their account, they will be able to see posts made by both theirs and other people using the app. If the user has created a post, they will have an option to remove it by doing a long press on the post. The user can create a new post by using the action bar menu where there is a plus icon. There, the user can write the name of the event, location, time, brief description, and upload an image. Once the user is content with their post, they can press “Post”. The recyclerview will now update the newly uploaded post. When the user clicks on the event, they can see the details of the event and they have the option to either upvote or downvote as well as comment. Pressing “Comment” will send them to another layout where they are able to see comments made in that particular event and can comment. 
 
+(PNGs are provided for reference)
+
+### View comments of a post
 ![image](https://user-images.githubusercontent.com/73298064/198181908-7251426a-4c2c-49a7-931d-00e3ded349d8.png)
 
-------
+ ### Create post
+ ![image](https://user-images.githubusercontent.com/73298064/198182074-947074c1-ad95-4977-b486-863de24f4261.png)
 
-View comments of a post
- 
- 
-(PNGs are provided for reference)
+### Login
+![image](https://user-images.githubusercontent.com/73298064/198182118-8fda0ba1-8ce1-4085-9407-d11b68acaa26.png)
+
+### Registration
+![image](https://user-images.githubusercontent.com/73298064/198182197-32095317-23d6-4221-9b87-12eac84b9b8c.png)
+
+### Post
+![image](https://user-images.githubusercontent.com/73298064/198182219-56fd87ff-fc39-4356-b53f-3204390d19b9.png)
+
+### Dashboard that displays all posts in the app 
+![image](https://user-images.githubusercontent.com/73298064/198182324-6a5f10e0-e5ac-4a0e-9ddc-bc3965102b79.png)
+
+
 

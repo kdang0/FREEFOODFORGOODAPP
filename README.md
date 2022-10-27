@@ -20,8 +20,8 @@ When a user opens the app, they are seen in the login page where they must log i
 
 (PNGs are provided for reference)
 
-### View comments of a post
-![image](https://user-images.githubusercontent.com/73298064/198181908-7251426a-4c2c-49a7-931d-00e3ded349d8.png)
+### View comments of a post											|
+![image](https://user-images.githubusercontent.com/73298064/198181908-7251426a-4c2c-49a7-931d-00e3ded349d8.png) |
 
  ### Create post
  ![image](https://user-images.githubusercontent.com/73298064/198182074-947074c1-ad95-4977-b486-863de24f4261.png)
